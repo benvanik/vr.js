@@ -144,6 +144,9 @@ void VRObject::PollSixense(std::ostringstream& s) {
       s << acd.controllers[cont].joystick_y << ",";
       s << acd.controllers[cont].trigger << ",";
       s << acd.controllers[cont].buttons << ",";
+      s << (acd.controllers[cont].is_docked ? "1," : "0,");
+      s << (int)acd.controllers[cont].which_hand << ",";
+      s << (int)acd.controllers[cont].hemi_tracking_enabled << ",";
     }
   }
 
