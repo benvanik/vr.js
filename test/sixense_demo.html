@@ -6,7 +6,10 @@
     <script src="../third_party/three.js/three.min.js"></script>
   </head>
   <body>
+    <div id="status"></div>
     <script>
+      var statusEl = document.getElementById('status');
+
       var canvasWidth = 800;
       var canvasHeight = 600;
       var cameraViewAngle = 45;
@@ -30,6 +33,13 @@
       pointLight.position.z = 130;
       scene.add(pointLight);
 
+      var defaultMaterial = new THREE.MeshLambertMaterial({
+        color: 0xCC0000
+      });
+      var activeMaterial = new THREE.MeshLambertMaterial({
+        color: 0x00CC00
+      });
+
       function createPointer() {
         var container = new THREE.Object3D();
         container.useQuaternion = true;
@@ -45,8 +55,14 @@
         var axis = new THREE.AxisHelper(50);
         container.add(axis);
 
+        var ball = new THREE.Mesh(
+            new THREE.SphereGeometry(10, 16, 16),
+            defaultMaterial);
+        container.add(ball);
+
         return {
           container: container,
+          ball: ball
         };
       };
 
@@ -59,7 +75,14 @@
         container.quaternion.y = controller.rotation[1];
         container.quaternion.z = controller.rotation[2];
         container.quaternion.w = controller.rotation[3];
-        // TODO(benvanik): change colors with buttons/etc
+
+        var ball = pointer.ball;
+        ball.material = controller.buttons ? activeMaterial : defaultMaterial;
+        ball.position.x = controller.joystick[0] * 10;
+        ball.position.y = controller.joystick[1] * 10;
+        ball.scale.x = 1 + controller.trigger;
+        ball.scale.y = 1 + controller.trigger;
+        ball.scale.z = 1 + controller.trigger;
       };
 
       var pointer0 = createPointer();
@@ -77,9 +100,14 @@
           if (vrstate.sixense.present) {
             updatePointer(pointer0, vrstate.sixense.controllers[0]);
             updatePointer(pointer1, vrstate.sixense.controllers[1]);
+
+            statusEl.innerHTML = '';
           } else {
             // Not plugged in.
+            statusEl.innerHTML = 'Sixense controller not found!';
           }
+        } else {
+          statusEl.innerHTML = 'Waiting for npvr plugin...';
         }
 
         renderer.render(scene, camera);
