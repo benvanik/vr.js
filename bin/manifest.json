@@ -1,0 +1,14 @@
+{
+  "name": "npvr",
+  "version": "1.0.0.0",
+  "manifest_version": 2,
+  "description": "NPAPI plugin to expose fun VR devices.",
+  "offline_enabled": true,
+
+  "plugins": [
+    {
+      "path": "npvr.dll",
+      "public": true
+    }
+  ]
+}
