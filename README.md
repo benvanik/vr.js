@@ -1,7 +1,8 @@
 EXPERIMENTAL
 
 
-* Build in Debug config with VS2010
+* Run gyp: run-gyp.bat
+* Open the build/npvr/npvr.sln file and build
 * Register with FF by running 'regsvr32 npvr.dll' in the output dir
 * Copy the sixense.dll from third_party/sixense/bin/win32/release_dll/ to the output dir (alongside npvr.dll)
 * Launch FF

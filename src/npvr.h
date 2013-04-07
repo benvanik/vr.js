@@ -3,7 +3,7 @@
 #ifndef NPVR_H_
 #define NPVR_H_
 
-#ifdef WIN32
+#ifdef _WIN32
 #define _CRT_SECURE_NO_WARNINGS
 #include <windows.h>
 #endif  // WIN32
