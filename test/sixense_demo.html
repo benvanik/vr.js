@@ -8,6 +8,11 @@
   <body>
     <div id="status"></div>
     <script>
+      var requestAnimationFrame =
+          window.requestAnimationFrame ||
+          window.mozRequestAnimationFrame ||
+          window.webkitRequestAnimationFrame;
+
       var statusEl = document.getElementById('status');
 
       var canvasWidth = 800;
@@ -111,9 +116,9 @@
         }
 
         renderer.render(scene, camera);
-        window.mozRequestAnimationFrame(tick);
+        requestAnimationFrame.call(window, tick);
       };
-      window.mozRequestAnimationFrame(tick);
+      requestAnimationFrame.call(window, tick);
     </script>
   </body>
 </html>

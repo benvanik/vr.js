@@ -57,12 +57,17 @@ bool VRObject::InvokeExec(const NPVariant* args, uint32_t arg_count,
   if (arg_count != 2) {
     return false;
   }
-  if (!NPVARIANT_IS_INT32(args[0]) ||
+  if (!(NPVARIANT_IS_INT32(args[0]) || NPVARIANT_IS_DOUBLE(args[0])) ||
       !NPVARIANT_IS_STRING(args[1])) {
     return false;
   }
 
-  int32_t command_id = NPVARIANT_TO_INT32(args[0]);
+  int32_t command_id = 0;
+  if (NPVARIANT_IS_INT32(args[0])) {
+    command_id = NPVARIANT_TO_INT32(args[0]);
+  } else if (NPVARIANT_IS_DOUBLE(args[1])) {
+    command_id = (int)NPVARIANT_TO_DOUBLE(args[0]);
+  }
   const NPUTF8* command_str = NPVARIANT_TO_STRING(args[1]).UTF8Characters;
 
   std::ostringstream s;

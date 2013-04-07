@@ -8,6 +8,11 @@
     <canvas id="canvas" width="400" height="600"></canvas>
 
     <script>
+      var requestAnimationFrame =
+          window.requestAnimationFrame ||
+          window.mozRequestAnimationFrame ||
+          window.webkitRequestAnimationFrame;
+
       var canvas = document.getElementById('canvas');
       var ctx = canvas.getContext('2d');
 
@@ -95,9 +100,9 @@
             y += h; ctx.fillText('sixense not detected', 0, y);
           }
 
-          window.mozRequestAnimationFrame(tick);
+          requestAnimationFrame.call(window, tick);
         };
-        window.mozRequestAnimationFrame(tick);
+        requestAnimationFrame.call(window, tick);
       });
     </script>
   </body>

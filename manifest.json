@@ -3,7 +3,6 @@
   "version": "1.0.0.0",
   "manifest_version": 2,
   "description": "NPAPI plugin to expose fun VR devices.",
-  "default_locale": "en",
   "offline_enabled": true,
 
   "plugins": [
