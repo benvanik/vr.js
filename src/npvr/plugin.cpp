@@ -51,12 +51,6 @@ bool Plugin::Init(NPWindow* np_window) {
   NPVariant v;
   OBJECT_TO_NPVARIANT(vr_object_, v);
   r = NPN_SetProperty(np_instance_, window_obj, vr_id, &v);
-  if (r != NPERR_NO_ERROR) {
-    // Unable to expose vr.
-    NPN_ReleaseObject(vr_object_);
-    NPN_ReleaseObject(window_obj);
-    return false;
-  }
 
   NPN_ReleaseObject(window_obj);
 

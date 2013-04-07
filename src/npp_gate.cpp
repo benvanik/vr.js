@@ -98,6 +98,7 @@ NPError NPP_Destroy (NPP instance, NPSavedData** save)
   if(pPlugin != NULL) {
     pPlugin->Destroy();
     delete pPlugin;
+    instance->pdata = NULL;
   }
   return rv;
 }
@@ -125,6 +126,7 @@ NPError NPP_SetWindow (NPP instance, NPWindow* pNPWindow)
     if(!pPlugin->Init(pNPWindow)) {
       delete pPlugin;
       pPlugin = NULL;
+      instance->pdata = NULL;
       return NPERR_MODULE_LOAD_FAILED_ERROR;
     }
   }
