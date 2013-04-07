@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NPVR Raw Data</title>
+    <script src="../lib/vr.js"></script>
+  </head>
+  <body>
+    <canvas id="canvas" width="400" height="600"></canvas>
+
+    <script>
+      var canvas = document.getElementById('canvas');
+      var ctx = canvas.getContext('2d');
+
+      vr.wait(function() {
+        console.log('npvr ready!');
+
+        console.log('hello: ' + vr.hello());
+
+        var state = vr.createState();
+        function tick() {
+          vr.poll(state);
+
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = 'black';
+          ctx.font = '12px monospace';
+          var w = 8;
+          var i0 = w * 0, i1 = w * 1, i2 = w * 2, i3 = w * 3;
+          var h = 12;
+          var y = 0;
+
+          if (state.sixense.present) {
+            y += h; ctx.fillText('sixense detected', i0, y);
+            for (var n = 0; n < state.sixense.controllers.length; n++) {
+              var controller = state.sixense.controllers[n];
+              y += h; ctx.fillText('controller ' + n + ':', i1, y);
+              y += h; ctx.fillText('isDocked: ' + controller.isDocked, i2, y);
+              var handValue;
+              switch (controller.hand) {
+                case vr.SixenseHand.UNKNOWN:
+                  handValue = 'unknown';
+                  break;
+                case vr.SixenseHand.LEFT:
+                  handValue = 'left';
+                  break;
+                case vr.SixenseHand.RIGHT:
+                  handValue = 'right';
+                  break;
+              }
+              y += h; ctx.fillText('hand: ' + handValue, i2, y);
+              y += h; ctx.fillText('tracking hemispheres: ' +
+                  controller.isTrackingHemispheres, i2, y);
+              if (controller.buttons) {
+                var buttons = [];
+                if (controller.buttons & vr.SixenseButton.BUTTON_START) {
+                  buttons.push('start');
+                }
+                if (controller.buttons & vr.SixenseButton.BUTTON_1) {
+                  buttons.push('b1');
+                }
+                if (controller.buttons & vr.SixenseButton.BUTTON_2) {
+                  buttons.push('b2');
+                }
+                if (controller.buttons & vr.SixenseButton.BUTTON_3) {
+                  buttons.push('b3');
+                }
+                if (controller.buttons & vr.SixenseButton.BUTTON_4) {
+                  buttons.push('b4');
+                }
+                if (controller.buttons & vr.SixenseButton.BUMPER) {
+                  buttons.push('bumper');
+                }
+                if (controller.buttons & vr.SixenseButton.JOYSTICK) {
+                  buttons.push('joystick');
+                }
+                y += h; ctx.fillText('buttons: ' + buttons.join(','), i2, y);
+              } else {
+                y += h; ctx.fillText('buttons: (none)', i2, y);
+              }
+              y += h; ctx.fillText('joystick:', i2, y);
+              y += h; ctx.fillText(controller.joystick[0], i3, y);
+              y += h; ctx.fillText(controller.joystick[1], i3, y);
+              y += h; ctx.fillText('trigger:', i2, y);
+              y += h; ctx.fillText(controller.trigger, i3, y);
+              y += h; ctx.fillText('position:', i2, y);
+              y += h; ctx.fillText(controller.position[0], i3, y);
+              y += h; ctx.fillText(controller.position[1], i3, y);
+              y += h; ctx.fillText(controller.position[2], i3, y);
+              y += h; ctx.fillText('rotation:', i2, y);
+              y += h; ctx.fillText(controller.rotation[0], i3, y);
+              y += h; ctx.fillText(controller.rotation[1], i3, y);
+              y += h; ctx.fillText(controller.rotation[2], i3, y);
+              y += h; ctx.fillText(controller.rotation[3], i3, y);
+            }
+          } else {
+            y += h; ctx.fillText('sixense not detected', 0, y);
+          }
+
+          window.mozRequestAnimationFrame(tick);
+        };
+        window.mozRequestAnimationFrame(tick);
+      });
+    </script>
+  </body>
+</html>
