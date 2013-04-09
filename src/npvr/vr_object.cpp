@@ -1,6 +1,7 @@
 // NPVR TEST
 
 #include <npvr/vr_object.h>
+#include <npvr/ovr_manager.h>
 
 #include <third_party/sixense/include/sixense.h>
 
@@ -103,6 +104,8 @@ bool VRObject::InvokePoll(const NPVariant* args, uint32_t arg_count,
     s << "s,|";
   }
 
+  PollOculus(s);
+
   // TODO(benvanik): avoid this extra allocation/copy somehow - perhaps
   //     by preallocating a large enough buffer (fixed size 8K or something)
   std::string s_value = s.str();
@@ -156,6 +159,16 @@ void VRObject::PollSixense(std::ostringstream& s) {
   }
 
   s << "|";
+}
+
+void VRObject::PollOculus(std::ostringstream& s) {
+  OVRManager *manager = OVRManager::Instance();
+  if (manager->DevicePresent()) {
+    s << "r,";
+    OVR::Quatf o = manager->GetOrientation();
+    s << o.x << "," << o.y << "," << o.z << "," << o.w;
+    s << "|";
+  }
 }
 
 bool VRObject::HasMethod(NPIdentifier name) {
