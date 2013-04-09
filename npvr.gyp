@@ -13,12 +13,16 @@
     'third_party_include_paths': [
       'third_party/npapi-sdk/',
       'third_party/sixense/include/',
+      'third_party/oculus-sdk/LibOVR/Include',
     ],
     'third_party_lib_paths': [
       '../../third_party/sixense/lib/win32/release_dll/',
+	  '../../third_party/oculus-sdk/LibOVR/Lib/Win32',
     ],
     'third_party_libs': [
       'sixense.lib',
+	  'libovr.lib',
+	  'winmm.lib',
     ],
   },
 
@@ -215,6 +219,8 @@
         'src/npvr/plugin.h',
         'src/npvr/vr_object.cpp',
         'src/npvr/vr_object.h',
+		'src/npvr/ovr_manager.cpp',
+		'src/npvr/ovr_manager.h',
 
         'src/main_win.cpp',
 

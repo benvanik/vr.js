@@ -32,12 +32,13 @@ private:
 
   bool InvokePoll(const NPVariant* args, uint32_t arg_count, NPVariant* result);
   void PollSixense(std::ostringstream& s);
+  void PollOculus(std::ostringstream& s);
 
 private:
-  NPIdentifier    exec_id_;
-  NPIdentifier    poll_id_;
+  NPIdentifier       exec_id_;
+  NPIdentifier       poll_id_;
 
-  bool            sixense_ready_;
+  bool               sixense_ready_;
 };
 
 }  // namespace npvr

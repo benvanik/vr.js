@@ -93,6 +93,8 @@
       var pointer0 = createPointer();
       var pointer1 = createPointer();
 
+      var oculusPointer = createPointer();
+
       var vrstate = vr.createState();
       function tick() {
         // Poll VR, if it's ready.
@@ -110,6 +112,14 @@
           } else {
             // Not plugged in.
             statusEl.innerHTML = 'Sixense controller not found!';
+          }
+
+          if (vrstate.oculus.present) {
+            var container = oculusPointer.container;
+            container.quaternion.x = vrstate.oculus.rotation[0];
+            container.quaternion.y = vrstate.oculus.rotation[1];
+            container.quaternion.z = vrstate.oculus.rotation[2];
+            container.quaternion.w = vrstate.oculus.rotation[3];
           }
         } else {
           statusEl.innerHTML = 'Waiting for npvr plugin...';
