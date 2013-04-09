@@ -219,8 +219,8 @@
         'src/npvr/plugin.h',
         'src/npvr/vr_object.cpp',
         'src/npvr/vr_object.h',
-		'src/npvr/ovr_manager.cpp',
-		'src/npvr/ovr_manager.h',
+        'src/npvr/ovr_manager.cpp',
+        'src/npvr/ovr_manager.h',
 
         'src/main_win.cpp',
 
