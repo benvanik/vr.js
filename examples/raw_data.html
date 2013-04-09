@@ -107,7 +107,7 @@
             y += h; ctx.fillText(state.oculus.rotation[2], i1, y);
             y += h; ctx.fillText(state.oculus.rotation[3], i1, y);
           } else {
-            y += h; ctx.fillText('oculus rift not detected');
+            y += h; ctx.fillText('oculus rift not detected', 0, y);
           }
 
           requestAnimationFrame.call(window, tick);

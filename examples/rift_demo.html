@@ -221,7 +221,8 @@
 				renderer = new THREE.WebGLRenderer({
 					devicePixelRatio: 1,
 					alpha: false,
-					clearColor: 0xffffff
+					clearColor: 0xffffff,
+					antialias: true
 				});
 
 				effect = new THREE.OculusRiftEffect( renderer );

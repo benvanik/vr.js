@@ -90,6 +90,12 @@
         ball.scale.z = 1 + controller.trigger;
       };
 
+      function togglePointer(pointer, visible) {
+        pointer.container.traverse(function(object) {
+          object.visible = visible;
+        });
+      };
+
       var pointer0 = createPointer();
       var pointer1 = createPointer();
 
@@ -101,9 +107,8 @@
         if (vr.isReady) {
           vr.poll(vrstate);
 
-          pointer0.visible = vrstate.sixense.present;
-          pointer1.visible = vrstate.sixense.present;
-
+          togglePointer(pointer0, vrstate.sixense.present);
+          togglePointer(pointer1, vrstate.sixense.present);
           if (vrstate.sixense.present) {
             updatePointer(pointer0, vrstate.sixense.controllers[0]);
             updatePointer(pointer1, vrstate.sixense.controllers[1]);
@@ -114,6 +119,7 @@
             statusEl.innerHTML = 'Sixense controller not found!';
           }
 
+          togglePointer(oculusPointer, vrstate.oculus.present);
           if (vrstate.oculus.present) {
             var container = oculusPointer.container;
             container.quaternion.x = vrstate.oculus.rotation[0];
