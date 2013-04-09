@@ -9,7 +9,7 @@
 THREE.OculusRiftEffect = function ( renderer ) {
 
 	// Configuration
-	this.separation = 20;
+	this.separation = 3;
 	this.distortion = 0.1;
 	this.aspectFactor = 1;
 	this.fov = 110;
@@ -37,6 +37,9 @@ THREE.OculusRiftEffect = function ( renderer ) {
 
 	renderer.autoClear = false;
 	renderer.setSize( displayWidth, displayHeight );
+
+	camera.aspect = displayWidth / displayHeight;
+	camera.updateProjectionMatrix();
 
 	var _params = { minFilter: THREE.LinearFilter, magFilter: THREE.NearestFilter, format: THREE.RGBAFormat };
 	var _renderTarget = new THREE.WebGLRenderTarget( displayWidth, displayHeight, _params );

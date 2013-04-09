@@ -122,9 +122,11 @@ THREE.OculusRiftControls = function ( camera ) {
 
 	};
 
-	this.update = function ( delta ) {
+	this.update = function ( delta, vrstate ) {
 
-		if ( scope.enabled === false ) return;
+		//if ( scope.enabled === false ) return;
+
+		// TODO: use vrstate to compute look
 
 		delta *= 0.1;
 
