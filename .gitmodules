@@ -1,3 +1,6 @@
 [submodule "third_party/gyp"]
 	path = third_party/gyp
 	url = https://github.com/benvanik/gyp.git
+[submodule "third_party/oculus-sdk"]
+	path = third_party/oculus-sdk
+	url = https://github.com/benvanik/oculus-sdk.git
