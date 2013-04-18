@@ -21,8 +21,8 @@
     ],
     'third_party_libs': [
       'sixense.lib',
-	  'libovr.lib',
-	  'winmm.lib',
+      'libovr.lib',
+      'winmm.lib',
     ],
   },
 

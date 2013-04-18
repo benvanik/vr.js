@@ -1,4 +1,4 @@
-# NPVR
+# vr.js
 An experimental NPAPI plugin for Chrome and Firefox that exposes fun VR devices.
 
 ## Supported Devices
@@ -8,7 +8,7 @@ An experimental NPAPI plugin for Chrome and Firefox that exposes fun VR devices.
 
 ## Installing
 
-* Download the [repository ZIP](https://github.com/benvanik/npvr/archive/master.zip)
+* Download the [repository ZIP](https://github.com/benvanik/vr.js/archive/master.zip)
 * Extract to some path
 * Firefox:
   * Open an administrator command prompt
@@ -69,10 +69,12 @@ Visual Studio 2010 or 2012 is required for building on Windows. The Express
 editions should work, just make sure to get the VC++ 2012 for Desktop variant.
 Other dependencies are included in the repo.
 
+Uninstall any previous installation before continuing.
+
 Check out the git repo and generate the Visual Studio projects:
 
-    git clone https://github.com/benvanik/npvr.git
-    cd npvr
+    git clone https://github.com/benvanik/vr.js.git
+    cd vr.js
     git submodule init
     git submodule update
     run-gyp.bat
@@ -80,24 +82,15 @@ Check out the git repo and generate the Visual Studio projects:
 Open `build\npvr\npvr.sln` and build. The outputs will be placed into
 `build\npvr\Debug\`.
 
-Copy the following files into `Debug\`:
-* `manifest.json`
-* `third_party\sixense\bin\win32\release_dll\sixense.dll`
+Run the following to prepare the debug version and register it with Firefox:
 
-Uninstall any previous installation before continuing.
+    make-debug.bat
 
-#### Installing in Firefox
+To use in Chrome:
 
-Open an administrator command prompt and cd to the `Debug\` directory.
-
-    regsvr32 npvr.dll
-
-You'll only need to do this once.
-
-#### Installing in Chrome
-
-Open `chrome://extensions`, choose 'Load unpacked extension', and select the
-`Debug\` folder.
+* Open Chrome to `chrome://extensions`
+* Check 'Developer mode' and click 'Load unpacked extension'
+* Select the `build\npvr\debug\` folder
 
 ### Debugging
 
