@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>NPVR Rift Demo</title>
+		<title>NPVR Cube Demo</title>
 		<style>
 			html, body {
 				width: 100%;
@@ -37,7 +37,7 @@
 	</head>
 	<body>
 		<script src="../lib/vr.js"></script>
-		<script src="../third_party/three.js/three.min.js"></script>
+		<script src="../third_party/three.js/three.js"></script>
 		<script src="js/controls/OculusRiftControls.js"></script>
 		<script src="js/effects/OculusRiftEffect.js"></script>
 
@@ -54,81 +54,58 @@
 
 			var ray;
 
-			function toggleFullScreen() {
-			  if (!document.fullscreenElement &&    // alternative standard method
-			      !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
-			    if (document.documentElement.requestFullscreen) {
-			      document.documentElement.requestFullscreen();
-			    } else if (document.documentElement.mozRequestFullScreen) {
-			      document.documentElement.mozRequestFullScreen();
-			    } else if (document.documentElement.webkitRequestFullscreen) {
-			      document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-			    }
-			  } else {
-			    if (document.cancelFullScreen) {
-			      document.cancelFullScreen();
-			    } else if (document.mozCancelFullScreen) {
-			      document.mozCancelFullScreen();
-			    } else if (document.webkitCancelFullScreen) {
-			      document.webkitCancelFullScreen();
-			    }
-			  }
-			}
-
 			// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
 
-			var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+			// var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
-			if ( havePointerLock ) {
-				var element = document.body;
+			// if ( havePointerLock ) {
+			// 	var element = document.body;
 
-				var fullscreenchange = function ( event ) {
-					if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
+			// 	var fullscreenchange = function ( event ) {
+			// 		if (document.fullscreenElement === element ||
+			// 				document.mozFullscreenElement === element ||
+			// 				document.mozFullScreenElement === element) {
+			// 			document.removeEventListener( 'fullscreenchange', fullscreenchange );
+			// 			document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+			// 			element.requestPointerLock();
+			// 		}
+			// 	}
 
-						document.removeEventListener( 'fullscreenchange', fullscreenchange );
-						document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+			// 	document.addEventListener( 'fullscreenchange', fullscreenchange, false );
+			// 	document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
 
-						element.requestPointerLock();
-					}
-				}
+			// 	element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
 
-				document.addEventListener( 'fullscreenchange', fullscreenchange, false );
-				document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
+			// 	var pointerlockchange = function ( event ) {
+			// 		if (document.pointerLockElement === element ||
+			// 				document.mozPointerLockElement === element ||
+			// 				document.webkitPointerLockElement === element) {
+			// 			controls.enabled = true;
+			// 		} else {
+			// 			controls.enabled = false;
+			// 		}
+			// 	}
 
-				element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+			// 	var pointerlockerror = function ( event ) {
+			// 	}
 
-				var pointerlockchange = function ( event ) {
-					if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+			// 	// Hook pointer lock state change events
+			// 	document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+			// 	document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+			// 	document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
 
-						controls.enabled = true;
-					} else {
-						controls.enabled = false;
-					}
-				}
+			// 	document.addEventListener( 'pointerlockerror', pointerlockerror, false );
+			// 	document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+			// 	document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
 
-				var pointerlockerror = function ( event ) {
-				}
-
-				// Hook pointer lock state change events
-				document.addEventListener( 'pointerlockchange', pointerlockchange, false );
-				document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
-				document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
-
-				document.addEventListener( 'pointerlockerror', pointerlockerror, false );
-				document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
-				document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
-
-				document.body.addEventListener( 'click', function ( event ) {
-					// Ask the browser to lock the pointer
-					element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-					element.requestPointerLock();
-				}, false );
-
-			} else {
-
-				instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
-
-			}
+			// 	document.body.addEventListener( 'click', function ( event ) {
+			// 		// Ask the browser to lock the pointer
+			// 		element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+			// 		element.requestPointerLock();
+			// 	}, false );
+			// } else {
+			// 	instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+			// }
 
 			init();
 			animate();
@@ -228,9 +205,9 @@
 				effect = new THREE.OculusRiftEffect( renderer );
 				//effect.setSize( window.innerWidth, window.innerHeight );
 
-				document.getElementById( 'distVal' ).innerHTML = effect.distortion.toFixed(2);
-				document.getElementById( 'sepVal' ).innerHTML = effect.separation;
-				document.getElementById( 'fovVal' ).innerHTML = effect.fov;
+				// document.getElementById( 'distVal' ).innerHTML = effect.distortion.toFixed(2);
+				// document.getElementById( 'sepVal' ).innerHTML = effect.separation;
+				// document.getElementById( 'fovVal' ).innerHTML = effect.fov;
 
 				document.body.appendChild( renderer.domElement );
 
@@ -243,18 +220,34 @@
 			function onWindowResize() {
 			}
 
+			window.IPD = 0.064;
+
 			function keyPressed (event) {
 				switch ( event.keyCode ) {
 					case 79: /*O*/ effect.distortion -= 0.01; document.getElementById( 'distVal' ).innerHTML = effect.distortion.toFixed(2); break;
 					case 80: /*P*/ effect.distortion += 0.01; document.getElementById( 'distVal' ).innerHTML = effect.distortion.toFixed(2); break;
 					case 75: /*K*/ effect.separation -= 1; document.getElementById( 'sepVal' ).innerHTML = effect.separation; break;
 					case 76: /*L*/ effect.separation += 1; document.getElementById( 'sepVal' ).innerHTML = effect.separation; break;
-					case 78: /*N*/ effect.fov -= 1; document.getElementById( 'fovVal' ).innerHTML = effect.fov; break;
-					case 77: /*M*/ effect.fov += 1; document.getElementById( 'fovVal' ).innerHTML = effect.fov; break;
+					case 78: /*N*/ //effect.fov -= 1; document.getElementById( 'fovVal' ).innerHTML = effect.fov; break;
+						window.IPD -= 0.01;
+						break;
+					case 77: /*M*/ //effect.fov += 1; document.getElementById( 'fovVal' ).innerHTML = effect.fov; break;
+						window.IPD += 0.01;
+						break;
 
 					case 70:
-						toggleFullScreen();
+						if (!vr.isFullScreen()) {
+							vr.beginFullScreen();
+						} else {
+							vr.exitFullScreen();
+						}
+            e.preventDefault();
 						break;
+
+          case 32:
+            vr.resetOculusOrientation();
+            e.preventDefault();
+            break;
 				}
 			}
 
@@ -282,7 +275,7 @@
 				controls.update( Date.now() - time, vr.isReady ? vrstate : null );
 
 				//renderer.render( scene, camera );
-				effect.render( scene, camera );
+				effect.render( scene, camera, vr.isReady ? vrstate : null );
 
 				time = Date.now();
 			}

@@ -74,8 +74,11 @@ bool VRObject::InvokeExec(const NPVariant* args, uint32_t arg_count,
   std::ostringstream s;
 
   switch (command_id) {
-    case 0x0001:
-      ExecQuery((const char*)command_str, s);
+    case 0x0001: // queryOculusInfo
+      QueryOculusInfo((const char*)command_str, s);
+      break;
+    case 0x0002: // resetOculusOrientation
+      ResetOculusOrientation((const char*)command_str, s);
       break;
   }
 
@@ -90,20 +93,33 @@ bool VRObject::InvokeExec(const NPVariant* args, uint32_t arg_count,
   return true;
 }
 
-void VRObject::ExecQuery(const char* command_str, std::ostringstream& s) {
-  s << "hello!";
+void VRObject::QueryOculusInfo(const char* command_str, std::ostringstream& s) {
+  OVRManager *manager = OVRManager::Instance();
+  const OVR::HMDInfo& info = *manager->GetDeviceInfo();
+
+  s << info.HResolution << "," << info.VResolution << ",";
+  s << info.HScreenSize << "," << info.VScreenSize << ",";
+  s << info.VScreenCenter << ",";
+  s << info.EyeToScreenDistance << ",";
+  s << info.LensSeparationDistance << ",";
+  s << info.InterpupillaryDistance << ",";
+  s << info.DistortionK[0] << ",";
+  s << info.DistortionK[1] << ",";
+  s << info.DistortionK[2] << ",";
+  s << info.DistortionK[3] << ",";
+  s << info.DesktopX << "," << info.DesktopY;
+}
+
+void VRObject::ResetOculusOrientation(const char* command_str, std::ostringstream& s) {
+  OVRManager *manager = OVRManager::Instance();
+  manager->ResetOrientation();
 }
 
 bool VRObject::InvokePoll(const NPVariant* args, uint32_t arg_count,
                           NPVariant* result) {
   std::ostringstream s;
 
-  if (sixense_ready_) {
-    PollSixense(s);
-  } else {
-    s << "s,|";
-  }
-
+  PollSixense(s);
   PollOculus(s);
 
   // TODO(benvanik): avoid this extra allocation/copy somehow - perhaps
@@ -118,6 +134,10 @@ bool VRObject::InvokePoll(const NPVariant* args, uint32_t arg_count,
 }
 
 void VRObject::PollSixense(std::ostringstream& s) {
+  if (!sixense_ready_) {
+    return;
+  }
+
   s << "s,";
 
   sixenseAllControllerData acd;

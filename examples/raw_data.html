@@ -19,7 +19,7 @@
       vr.wait(function() {
         console.log('npvr ready!');
 
-        console.log('hello: ' + vr.hello());
+        var latestOculusInfo = null;
 
         var state = vr.createState();
         function tick() {
@@ -102,12 +102,39 @@
 
           if (state.oculus.present) {
             y += h; ctx.fillText('oculus rift detected', 0, y);
-            y += h; ctx.fillText(state.oculus.rotation[0], i1, y);
-            y += h; ctx.fillText(state.oculus.rotation[1], i1, y);
-            y += h; ctx.fillText(state.oculus.rotation[2], i1, y);
-            y += h; ctx.fillText(state.oculus.rotation[3], i1, y);
+            if (!latestOculusInfo) {
+              latestOculusInfo = vr.queryOculusInfo();
+            }
+            if (latestOculusInfo) {
+              var info = latestOculusInfo;
+              y += h; ctx.fillText('resolution (px): ' +
+                  info.resolutionHorz + 'x' + info.resolutionVert, i1, y);
+              y += h; ctx.fillText('screen size (m): ' +
+                  info.screenSizeHorz + 'x' + info.screenSizeVert, i1, y);
+              y += h; ctx.fillText('screen center (m): ' +
+                  info.screenCenterVert, i1, y);
+              y += h; ctx.fillText('eye-to-screen (m): ' +
+                  info.eyeToScreenDistance, i1, y);
+              y += h; ctx.fillText('lens separation (m): ' +
+                  info.lensSeparationDistance, i1, y);
+              y += h; ctx.fillText('IPD (m): ' +
+                  info.interpupillaryDistance, i1, y);
+              y += h; ctx.fillText('desktop position (px): ' +
+                  info.desktopX + ',' + info.desktopY, i1, y);
+              y += h; ctx.fillText('distortion k: ' +
+                  info.distortionK[0] + ',' +
+                  info.distortionK[1] + ',' +
+                  info.distortionK[2] + ',' +
+                  info.distortionK[3] + ',', i1, y);
+            }
+            y += h; ctx.fillText('rotation:', i1, y);
+            y += h; ctx.fillText(state.oculus.rotation[0], i2, y);
+            y += h; ctx.fillText(state.oculus.rotation[1], i2, y);
+            y += h; ctx.fillText(state.oculus.rotation[2], i2, y);
+            y += h; ctx.fillText(state.oculus.rotation[3], i2, y);
           } else {
             y += h; ctx.fillText('oculus rift not detected', 0, y);
+            latestOculusInfo = null;
           }
 
           requestAnimationFrame.call(window, tick);

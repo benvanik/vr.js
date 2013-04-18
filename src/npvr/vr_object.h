@@ -28,7 +28,8 @@ public:
 
 private:
   bool InvokeExec(const NPVariant* args, uint32_t arg_count, NPVariant* result);
-  void ExecQuery(const char* command_str, std::ostringstream& s);
+  void QueryOculusInfo(const char* command_str, std::ostringstream& s);
+  void ResetOculusOrientation(const char* command_str, std::ostringstream& s);
 
   bool InvokePoll(const NPVariant* args, uint32_t arg_count, NPVariant* result);
   void PollSixense(std::ostringstream& s);
