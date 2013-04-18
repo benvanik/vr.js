@@ -20,6 +20,40 @@ An experimental NPAPI plugin for Chrome and Firefox that exposes fun VR devices.
   * Check 'Developer mode' and click 'Load unpacked extension'
   * Select the `bin\` folder in the path you extracted the ZIP into
 
+## Tips
+
+### Calibration
+
+In the future there will likely be a simple calibration tool added to the JS
+library, but for now the best way to get your IPD is to run Team Fortress 2's
+calibration tool and copy the value out.
+
+### Reducing Latency
+
+#### Disable Aero on Windows
+
+This removes a frame of latency.
+
+* Right click on desktop
+* Personalize
+* Choose Windows 7 Basic or Windows Classic
+
+#### Disable Vsync
+
+In Chrome you can use `about:flags` to enable the `Disable GPU VSync` option.
+
+There's currently no way of doing this in Firefox. Instead, you'll need to set
+it in your GPU driver configuration tool.
+
+For AMD cards it's buried under the Catalyst Control Center:
+`Gaming` -> `3D Application Settings` -> `Frame Rate Control` -> `Wait for Vertical
+Refresh`
+
+#### Write Fast Code
+
+Use `requestAnimationFrame` for your rendering and always render as fast as
+possible.
+
 ## Demos
 
 * Raw Data: `examples/raw_data.html`
