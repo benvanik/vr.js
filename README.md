@@ -4,6 +4,7 @@ An experimental NPAPI plugin for Chrome and Firefox that exposes fun VR devices.
 ## Supported Devices
 
 * [Razer Hydra](http://www.razerzone.com/gaming-controllers/razer-hydra)
+* [Oculus Rift Development Kit](https://www.oculusvr.com/)
 
 ## Installing
 
@@ -21,14 +22,17 @@ An experimental NPAPI plugin for Chrome and Firefox that exposes fun VR devices.
 
 ## Demos
 
-* Raw Data: `test/raw_data.html`
-* Sixense 3D Demo: `test/sixense_demo.html`
+* Raw Data: `examples/raw_data.html`
+* Sixense Data Visualization: `examples/sixense_viz.html`
+* Rift Data Visualization: `examples/rift_viz.html`
+* Three.js Cube Demo: `examples/cube_demo.html`
 
 ## Building
 
 ### Windows
 
-Visual Studio 2010 and the Platform SDK is required for building on Windows.
+Visual Studio 2010 or 2012 is required for building on Windows. The Express
+editions should work, just make sure to get the VC++ 2012 for Desktop variant.
 Other dependencies are included in the repo.
 
 Check out the git repo and generate the Visual Studio projects:
