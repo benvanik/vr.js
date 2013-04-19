@@ -182,10 +182,15 @@ var StereoEye = function(left, top, width, height) {
 
   /**
    * Eye-specific distortion center X.
-   * The Y is shared between both and is available off of the stereo params.
    * @type {number}
    */
   this.distortionCenterOffsetX = 0;
+
+  /**
+   * Eye-specific distortion center Y.
+   * @type {number}
+   */
+  this.distortionCenterOffsetY = 0;
 
   /**
    * Matrix used for drawing 3D things.
@@ -213,21 +218,34 @@ var StereoEye = function(left, top, width, height) {
  * @constructor
  */
 var StereoParams = function() {
-  this.distortionCenterOffsetX = 0;
-  this.distortionCenterOffsetY = 0;
+  /**
+   * Near plane Z.
+   * @type {number}
+   */
+  this.near = 0.01;
+
+  /**
+   * Far plane Z.
+   * @type {number}
+   */
+  this.far = 1000;
+
+  /**
+   * Scale by which the input render texture is scaled by to make the
+   * post-distortion result fit the viewport.
+   * @type {number}
+   */
   this.distortionScale = 1;
+
+  // Unknown.
   this.distortionFitX = -1;
   this.distortionFitY = 0;
 
+  /**
+   * Overridden IPD from the device.
+   * @type {number}
+   */
   this.interpupillaryDistance = 0.064;
-
-  this.projectionCenterOffset = 0;
-
-  this.aspect = 1;
-  this.fovY = 80 * Math.PI / 180;
-  this.fovPixels = 0;
-  this.orthoPixelOffset = 0;
-  this.projCenter = mat4.create();
 
   /**
    * Eyes.
@@ -246,20 +264,20 @@ var StereoParams = function() {
  * @param {!vr.VROculusInfo} info HMD info.
  */
 StereoParams.prototype.update = function(info) {
-  this.aspect = info.resolutionHorz / info.resolutionVert / 2;
+  var aspect = info.resolutionHorz / info.resolutionVert / 2;
 
   // -- updateDistortionOffsetAndScale --
 
   var lensOffset = info.lensSeparationDistance / 2;
   var lensShift = info.screenSizeHorz / 4 - lensOffset;
   var lensViewportShift = 4 * lensShift / info.screenSizeHorz;
-  this.distortionCenterOffsetX = lensViewportShift;
+  var distortionCenterOffsetX = lensViewportShift;
   if (Math.abs(this.distortionFitX) < 0.0001 &&
       Math.abs(this.distortionFitY) < 0.0001) {
     this.distortionScale = 1;
   } else {
     var stereoAspect = info.resolutionHorz / info.resolutionVert / 2;
-    var dx = this.distortionFitX - this.distortionCenterOffsetX;
+    var dx = this.distortionFitX - distortionCenterOffsetX;
     var dy = this.distortionFitY / stereoAspect;
     var fitRadius = Math.sqrt(dx * dx + dy * dy);
     this.distortionScale = info.distort(fitRadius) / fitRadius;
@@ -268,13 +286,13 @@ StereoParams.prototype.update = function(info) {
   // -- updateComputedState --
 
   var percievedHalfRTDistance = info.screenSizeVert / 2 * this.distortionScale;
-  this.fovY = 2 * Math.atan(percievedHalfRTDistance / info.eyeToScreenDistance);
+  var fovY = 2 * Math.atan(percievedHalfRTDistance / info.eyeToScreenDistance);
 
   // -- updateProjectionOffset --
 
   var viewCenter = info.screenSizeHorz / 4;
   var eyeProjectionShift = viewCenter - this.interpupillaryDistance / 2;
-  this.projectionCenterOffset = 4 * eyeProjectionShift / info.screenSizeHorz;
+  var projectionCenterOffset = 4 * eyeProjectionShift / info.screenSizeHorz;
 
   // -- update2D --
 
@@ -289,37 +307,40 @@ StereoParams.prototype.update = function(info) {
   var percievedHalfScreenDistance =
       Math.tan(area2dfov / 2) * info.eyeToScreenDistance;
   var vfovSize = 2.0 * percievedHalfScreenDistance / this.distortionScale;
-  this.fovPixels = info.resolutionVert * vfovSize / info.screenSizeVert;
-  var orthoPixelOffset = (pixelDifference + offCenterShiftPixels / this.distortionScale) / 2;
-  this.orthoPixelOffset = orthoPixelOffset * 2 / this.fovPixels;
+  var fovPixels = info.resolutionVert * vfovSize / info.screenSizeVert;
+  var orthoPixelOffset =
+      (pixelDifference + offCenterShiftPixels / this.distortionScale) / 2;
+  orthoPixelOffset = orthoPixelOffset * 2 / fovPixels;
 
   // -- updateEyeParams --
 
-  this.eyes[0].distortionCenterOffsetX = this.distortionCenterOffsetX;
-  this.eyes[1].distortionCenterOffsetX = -this.distortionCenterOffsetX;
+  this.eyes[0].distortionCenterOffsetX = distortionCenterOffsetX;
+  this.eyes[0].distortionCenterOffsetY = 0;
+  this.eyes[1].distortionCenterOffsetX = -distortionCenterOffsetX;
+  this.eyes[1].distortionCenterOffsetY = 0;
   mat4.identity(this.eyes[0].viewAdjustMatrix);
   this.eyes[0].viewAdjustMatrix[12] = this.interpupillaryDistance / 2;
   mat4.identity(this.eyes[1].viewAdjustMatrix);
   this.eyes[1].viewAdjustMatrix[12] = -this.interpupillaryDistance / 2;
 
-  mat4.perspective(tmpMat4, this.fovY, this.aspect, 0.01, 1000);
-  vec3.set(tmpVec3, this.projectionCenterOffset, 0, 0);
+  mat4.perspective(tmpMat4, fovY, aspect, this.near, this.far);
+  vec3.set(tmpVec3, projectionCenterOffset, 0, 0);
   mat4.translate(this.eyes[0].projectionMatrix, tmpMat4, tmpVec3);
-  vec3.set(tmpVec3, -this.projectionCenterOffset, 0, 0);
+  vec3.set(tmpVec3, -projectionCenterOffset, 0, 0);
   mat4.translate(this.eyes[1].projectionMatrix, tmpMat4, tmpVec3);
 
   var orthoLeft = this.eyes[0].orthoProjectionMatrix;
   mat4.identity(orthoLeft);
-  orthoLeft[0] = this.fovPixels / (info.resolutionHorz / 2);
-  orthoLeft[5] = -this.fovPixels / info.resolutionVert;
-  vec3.set(tmpVec3, this.orthoPixelOffset, 0, 0);
+  orthoLeft[0] = fovPixels / (info.resolutionHorz / 2);
+  orthoLeft[5] = -fovPixels / info.resolutionVert;
+  vec3.set(tmpVec3, orthoPixelOffset, 0, 0);
   mat4.translate(orthoLeft, orthoLeft, tmpVec3);
 
   var orthoRight = this.eyes[1].orthoProjectionMatrix;
   mat4.identity(orthoRight);
-  orthoRight[0] = this.fovPixels / (info.resolutionHorz / 2);
-  orthoRight[5] = -this.fovPixels / info.resolutionVert;
-  vec3.set(tmpVec3, -this.orthoPixelOffset, 0, 0);
+  orthoRight[0] = fovPixels / (info.resolutionHorz / 2);
+  orthoRight[5] = -fovPixels / info.resolutionVert;
+  vec3.set(tmpVec3, -orthoPixelOffset, 0, 0);
   mat4.translate(orthoRight, orthoRight, tmpVec3);
 };
 
@@ -485,6 +506,9 @@ StereoRenderer.prototype.initialize_ = function() {
   var gl = this.gl_;
   var info = this.hmdInfo_;
 
+  // Reset stereo renderer params.
+  this.stereoParams_.interpupillaryDistance = info.interpupillaryDistance;
+
   // Resize canvas to HMD resolution.
   // Also ensure device pixel size is 1:1.
   gl.canvas.width = info.resolutionHorz;
@@ -573,6 +597,24 @@ StereoRenderer.prototype.setupRenderTarget_ = function(width, height) {
   if (status != gl.FRAMEBUFFER_COMPLETE) {
     throw 'Invalid framebuffer: ' + status;
   }
+};
+
+
+/**
+ * Gets the current interpupillary distance value.
+ * @return {number} IPD value.
+ */
+StereoRenderer.prototype.getIPD = function() {
+  return this.stereoParams_.interpupillaryDistance;
+};
+
+
+/**
+ * Sets a new interpupillary distance value.
+ * @param {number} value New IPD value.
+ */
+StereoRenderer.prototype.setIPD = function(value) {
+  this.stereoParams_.interpupillaryDistance = value;
 };
 
 
@@ -1071,6 +1113,15 @@ Demo.prototype.createWebGL_ = function(canvas) {
 
 
 /**
+ * Updates the status message.
+ * @param {string?} value New value, if any.
+ */
+Demo.prototype.setStatus = function(value) {
+  this.statusEl_.innerHTML = value || '';
+};
+
+
+/**
  * Handles key press events.
  * @param {!Event} e Browser event.
  * @return {boolean} Whether the key press was handled.
@@ -1091,6 +1142,19 @@ Demo.prototype.keyPressed_ = function(e) {
         vr.exitFullScreen();
       }
       return true;
+
+    case 78: // n
+      var ipd = this.stereoRenderer_.getIPD();
+      ipd -= 0.001;
+      this.stereoRenderer_.setIPD(ipd);
+      this.setStatus('ipd: ' + ipd);
+      break;
+    case 77: // m
+      var ipd = this.stereoRenderer_.getIPD();
+      ipd += 0.001;
+      this.stereoRenderer_.setIPD(ipd);
+      this.setStatus('ipd: ' + ipd);
+      break;
   }
   return false;
 };

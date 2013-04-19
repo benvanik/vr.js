@@ -38,17 +38,6 @@ This removes a frame of latency.
 * Personalize
 * Choose Windows 7 Basic or Windows Classic
 
-#### Disable Vsync
-
-In Chrome you can use `about:flags` to enable the `Disable GPU VSync` option.
-
-There's currently no way of doing this in Firefox. Instead, you'll need to set
-it in your GPU driver configuration tool.
-
-For AMD cards it's buried under the Catalyst Control Center:
-`Gaming` -> `3D Application Settings` -> `Frame Rate Control` -> `Wait for Vertical
-Refresh`
-
 #### Write Fast Code
 
 Use `requestAnimationFrame` for your rendering and always render as fast as
