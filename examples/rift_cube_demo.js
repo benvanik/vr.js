@@ -397,7 +397,9 @@ var StereoRenderer = function(gl, opt_attributes) {
    * @private
    */
   this.warpProgram_ = new Program(gl, 'StereoRendererWarp',
-      StereoRenderer.WARP_VERTEX_SOURCE_, StereoRenderer.WARP_FRAGMENT_SOURCE_,
+      StereoRenderer.WARP_VERTEX_SOURCE_,
+      StereoRenderer.WARP_FRAGMENT_SOURCE_,
+      //StereoRenderer.STRAIGHT_FRAGMENT_SOURCE_,
       StereoRenderer.WARP_ATTRIBUTE_NAMES_, StereoRenderer.WARP_UNIFORM_NAMES_);
 
   /**
@@ -772,6 +774,23 @@ StereoRenderer.WARP_FRAGMENT_SOURCE_ = [
   //'    gl_FragColor = vec4(0.0, tc.xy, 1.0);',
   '    gl_FragColor = texture2D(u_tex0, tc);',
   '  }',
+  '}'
+].join('\n');
+
+
+/**
+ * Source code for the warp fragment shader in debug mode.
+ * This just passes the texture right through.
+ * @type {string}
+ * @const
+ * @private
+ */
+StereoRenderer.STRAIGHT_FRAGMENT_SOURCE_ = [
+  'precision highp float;',
+  'varying vec2 v_uv;',
+  'uniform sampler2D u_tex0;',
+  'void main() {',
+  '  gl_FragColor = texture2D(u_tex0, v_uv);',
   '}'
 ].join('\n');
 
