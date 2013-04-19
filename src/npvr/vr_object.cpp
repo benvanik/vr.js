@@ -66,7 +66,7 @@ bool VRObject::InvokeExec(const NPVariant* args, uint32_t arg_count,
   int32_t command_id = 0;
   if (NPVARIANT_IS_INT32(args[0])) {
     command_id = NPVARIANT_TO_INT32(args[0]);
-  } else if (NPVARIANT_IS_DOUBLE(args[1])) {
+  } else if (NPVARIANT_IS_DOUBLE(args[0])) {
     command_id = (int)NPVARIANT_TO_DOUBLE(args[0]);
   }
   const NPUTF8* command_str = NPVARIANT_TO_STRING(args[1]).UTF8Characters;
