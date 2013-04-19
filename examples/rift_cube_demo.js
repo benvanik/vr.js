@@ -620,7 +620,9 @@ StereoRenderer.prototype.render = function(vrstate, callback, opt_scope) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer_);
     var fullWidth = this.hmdInfo_.resolutionHorz;
     var fullHeight = this.hmdInfo_.resolutionVert;
-    gl.viewport(0, 0, fullWidth, fullHeight);
+    gl.viewport(
+        eye.viewport[0] * fullWidth, eye.viewport[1] * fullHeight,
+        eye.viewport[2] * fullWidth, eye.viewport[3] * fullHeight);
     callback.call(opt_scope, fullWidth, fullHeight, eye);
     gl.flush();
 
