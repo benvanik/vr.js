@@ -243,9 +243,17 @@ var StereoParams = function() {
 
   /**
    * Overridden IPD from the device.
+   * Initialized to device value on startup.
    * @type {number}
    */
   this.interpupillaryDistance = 0.064;
+
+  /**
+   * Overridden eye to screen distance from device.
+   * Initialized to device value on startup.
+   * @type {number}
+   */
+  this.eyeToScreenDistance = 0.041;
 
   /**
    * Eyes.
@@ -286,7 +294,7 @@ StereoParams.prototype.update = function(info) {
   // -- updateComputedState --
 
   var percievedHalfRTDistance = info.screenSizeVert / 2 * this.distortionScale;
-  var fovY = 2 * Math.atan(percievedHalfRTDistance / info.eyeToScreenDistance);
+  var fovY = 2 * Math.atan(percievedHalfRTDistance / this.eyeToScreenDistance);
 
   // -- updateProjectionOffset --
 
@@ -299,13 +307,13 @@ StereoParams.prototype.update = function(info) {
   var eyeDistanceScreenPixels =
       (info.resolutionHorz / info.screenSizeHorz) * this.interpupillaryDistance;
   var offCenterShiftPixels =
-      (info.eyeToScreenDistance / 0.8) * eyeDistanceScreenPixels;
+      (this.eyeToScreenDistance / 0.8) * eyeDistanceScreenPixels;
   var leftPixelCenter = (info.resolutionHorz / 2) - eyeDistanceScreenPixels / 2;
   var rightPixelCenter = eyeDistanceScreenPixels / 2;
   var pixelDifference = leftPixelCenter - rightPixelCenter;
   var area2dfov = 85 * Math.PI / 180;
   var percievedHalfScreenDistance =
-      Math.tan(area2dfov / 2) * info.eyeToScreenDistance;
+      Math.tan(area2dfov / 2) * this.eyeToScreenDistance;
   var vfovSize = 2.0 * percievedHalfScreenDistance / this.distortionScale;
   var fovPixels = info.resolutionVert * vfovSize / info.screenSizeVert;
   var orthoPixelOffset =
@@ -508,6 +516,7 @@ StereoRenderer.prototype.initialize_ = function() {
 
   // Reset stereo renderer params.
   this.stereoParams_.interpupillaryDistance = info.interpupillaryDistance;
+  this.stereoParams_.eyeToScreenDistance = info.eyeToScreenDistance;
 
   // Resize canvas to HMD resolution.
   // Also ensure device pixel size is 1:1.
@@ -615,6 +624,24 @@ StereoRenderer.prototype.getIPD = function() {
  */
 StereoRenderer.prototype.setIPD = function(value) {
   this.stereoParams_.interpupillaryDistance = value;
+};
+
+
+/**
+ * Gets the current eye to screen distance value.
+ * @return {number} Eye to screen distance value, in mm.
+ */
+StereoRenderer.prototype.getEyeToScreenDistance = function() {
+  return this.stereoParams_.eyeToScreenDistance;
+};
+
+
+/**
+ * Sets a new eye to screen distance value.
+ * @param {number} value New eye to screen distance value, in mm.
+ */
+StereoRenderer.prototype.setEyeToScreenDistance = function(value) {
+  this.stereoParams_.eyeToScreenDistance = value;
 };
 
 
@@ -1154,6 +1181,19 @@ Demo.prototype.keyPressed_ = function(e) {
       ipd += 0.001;
       this.stereoRenderer_.setIPD(ipd);
       this.setStatus('ipd: ' + ipd);
+      break;
+
+    case 86: // v
+      var eyeToScreenDistance = this.stereoRenderer_.getEyeToScreenDistance();
+      eyeToScreenDistance -= 0.0001;
+      this.stereoRenderer_.setEyeToScreenDistance(eyeToScreenDistance);
+      this.setStatus('eyeToScreenDistance: ' + eyeToScreenDistance);
+      break;
+    case 66: // b
+      var eyeToScreenDistance = this.stereoRenderer_.getEyeToScreenDistance();
+      eyeToScreenDistance += 0.0001;
+      this.stereoRenderer_.setEyeToScreenDistance(eyeToScreenDistance);
+      this.setStatus('eyeToScreenDistance: ' + eyeToScreenDistance);
       break;
   }
   return false;
