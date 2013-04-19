@@ -74,11 +74,11 @@ bool VRObject::InvokeExec(const NPVariant* args, uint32_t arg_count,
   std::ostringstream s;
 
   switch (command_id) {
-    case 0x0001: // queryOculusInfo
-      QueryOculusInfo((const char*)command_str, s);
+    case 0x0001:
+      QueryHmdInfo((const char*)command_str, s);
       break;
-    case 0x0002: // resetOculusOrientation
-      ResetOculusOrientation((const char*)command_str, s);
+    case 0x0002:
+      ResetHmdOrientation((const char*)command_str, s);
       break;
   }
 
@@ -93,8 +93,12 @@ bool VRObject::InvokeExec(const NPVariant* args, uint32_t arg_count,
   return true;
 }
 
-void VRObject::QueryOculusInfo(const char* command_str, std::ostringstream& s) {
+void VRObject::QueryHmdInfo(const char* command_str, std::ostringstream& s) {
   OVRManager *manager = OVRManager::Instance();
+  if (!manager->DevicePresent()) {
+    return;
+  }
+
   const OVR::HMDInfo& info = *manager->GetDeviceInfo();
 
   s << info.HResolution << "," << info.VResolution << ",";
@@ -110,8 +114,12 @@ void VRObject::QueryOculusInfo(const char* command_str, std::ostringstream& s) {
   s << info.DesktopX << "," << info.DesktopY;
 }
 
-void VRObject::ResetOculusOrientation(const char* command_str, std::ostringstream& s) {
+void VRObject::ResetHmdOrientation(const char* command_str, std::ostringstream& s) {
   OVRManager *manager = OVRManager::Instance();
+  if (!manager->DevicePresent()) {
+    return;
+  }
+
   manager->ResetOrientation();
 }
 
@@ -119,8 +127,8 @@ bool VRObject::InvokePoll(const NPVariant* args, uint32_t arg_count,
                           NPVariant* result) {
   std::ostringstream s;
 
-  PollSixense(s);
-  PollOculus(s);
+  PollSixenseState(s);
+  PollHmdState(s);
 
   // TODO(benvanik): avoid this extra allocation/copy somehow - perhaps
   //     by preallocating a large enough buffer (fixed size 8K or something)
@@ -133,7 +141,7 @@ bool VRObject::InvokePoll(const NPVariant* args, uint32_t arg_count,
   return true;
 }
 
-void VRObject::PollSixense(std::ostringstream& s) {
+void VRObject::PollSixenseState(std::ostringstream& s) {
   if (!sixense_ready_) {
     return;
   }
@@ -181,7 +189,7 @@ void VRObject::PollSixense(std::ostringstream& s) {
   s << "|";
 }
 
-void VRObject::PollOculus(std::ostringstream& s) {
+void VRObject::PollHmdState(std::ostringstream& s) {
   OVRManager *manager = OVRManager::Instance();
   if (manager->DevicePresent()) {
     s << "r,";

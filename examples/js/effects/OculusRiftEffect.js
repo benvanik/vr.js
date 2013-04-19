@@ -198,7 +198,7 @@ THREE.OculusRiftEffect.prototype.render = function(scene, camera, vrstate) {
     if (nowPresent) {
       // Connected.
       this.present_ = true;
-      this.oculusInfo_ = vr.queryOculusInfo() || new vr.VROculusInfo();
+      this.oculusInfo_ = vr.queryHmdInfo() || new vr.VROculusInfo();
       console.log('oculus detected');
       console.log(this.oculusInfo_);
 

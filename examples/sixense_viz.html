@@ -14,6 +14,14 @@
           window.webkitRequestAnimationFrame;
 
       var statusEl = document.getElementById('status');
+      statusEl.innerHTML = 'Waiting for plugin...';
+      vr.load(function(error) {
+        if (error) {
+          statusEl.innerHTML = 'Plugin error: ' + error.toString();
+        } else {
+          statusEl.innerHTML = '';
+        }
+      });
 
       var canvasWidth = 800;
       var canvasHeight = 600;
@@ -99,29 +107,28 @@
       var pointer0 = createPointer();
       var pointer1 = createPointer();
 
-      var vrstate = vr.createState();
+      var vrstate = new vr.State();
       function tick() {
+        requestAnimationFrame.call(window, tick);
+
         // Poll VR, if it's ready.
-        if (vr.isReady) {
-          vr.poll(vrstate);
+        if (!vr.poll(vrstate)) {
+          return;
+        }
 
-          togglePointer(pointer0, vrstate.sixense.present);
-          togglePointer(pointer1, vrstate.sixense.present);
-          if (vrstate.sixense.present) {
-            updatePointer(pointer0, vrstate.sixense.controllers[0]);
-            updatePointer(pointer1, vrstate.sixense.controllers[1]);
+        togglePointer(pointer0, vrstate.sixense.present);
+        togglePointer(pointer1, vrstate.sixense.present);
+        if (vrstate.sixense.present) {
+          updatePointer(pointer0, vrstate.sixense.controllers[0]);
+          updatePointer(pointer1, vrstate.sixense.controllers[1]);
 
-            statusEl.innerHTML = '';
-          } else {
-            // Not plugged in.
-            statusEl.innerHTML = 'Sixense controller not found!';
-          }
+          statusEl.innerHTML = '';
         } else {
-          statusEl.innerHTML = 'Waiting for npvr plugin...';
+          // Not plugged in.
+          statusEl.innerHTML = 'Sixense controller not found!';
         }
 
         renderer.render(scene, camera);
-        requestAnimationFrame.call(window, tick);
       };
       requestAnimationFrame.call(window, tick);
     </script>

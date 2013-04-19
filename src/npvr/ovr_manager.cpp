@@ -82,9 +82,15 @@ bool OVRManager::DevicePresent() const {
 }
 
 OVR::Quatf OVRManager::GetOrientation() const {
-  return sensor_fusion_->GetOrientation();
+  if (sensor_fusion_) {
+    return sensor_fusion_->GetOrientation();
+  } else {
+    return OVR::Quatf(0, 0, 0, 1);
+  }
 }
 
 void OVRManager::ResetOrientation() {
-  sensor_fusion_->Reset();
+  if (sensor_fusion_) {
+    sensor_fusion_->Reset();
+  }
 }

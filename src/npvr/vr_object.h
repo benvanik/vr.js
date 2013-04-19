@@ -28,12 +28,12 @@ public:
 
 private:
   bool InvokeExec(const NPVariant* args, uint32_t arg_count, NPVariant* result);
-  void QueryOculusInfo(const char* command_str, std::ostringstream& s);
-  void ResetOculusOrientation(const char* command_str, std::ostringstream& s);
+  void QueryHmdInfo(const char* command_str, std::ostringstream& s);
+  void ResetHmdOrientation(const char* command_str, std::ostringstream& s);
 
   bool InvokePoll(const NPVariant* args, uint32_t arg_count, NPVariant* result);
-  void PollSixense(std::ostringstream& s);
-  void PollOculus(std::ostringstream& s);
+  void PollSixenseState(std::ostringstream& s);
+  void PollHmdState(std::ostringstream& s);
 
 private:
   NPIdentifier    exec_id_;

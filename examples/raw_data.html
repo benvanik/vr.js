@@ -16,12 +16,14 @@
       var canvas = document.getElementById('canvas');
       var ctx = canvas.getContext('2d');
 
-      vr.wait(function() {
+      vr.load(function() {
+        if (vr.error) {
+          window.alert('VR error:\n' + vr.error.toString());
+          return;
+        }
         console.log('npvr ready!');
 
-        var latestOculusInfo = null;
-
-        var state = vr.createState();
+        var state = new vr.State();
         function tick() {
           vr.poll(state);
 
@@ -100,41 +102,37 @@
             y += h; ctx.fillText('sixense not detected', 0, y);
           }
 
-          if (state.oculus.present) {
+          if (state.hmd.present) {
             y += h; ctx.fillText('oculus rift detected', 0, y);
-            if (!latestOculusInfo) {
-              latestOculusInfo = vr.queryOculusInfo();
-            }
-            if (latestOculusInfo) {
-              var info = latestOculusInfo;
+            var hmdInfo = vr.getHmdInfo();
+            if (hmdInfo) {
               y += h; ctx.fillText('resolution (px): ' +
-                  info.resolutionHorz + 'x' + info.resolutionVert, i1, y);
+                  hmdInfo.resolutionHorz + 'x' + hmdInfo.resolutionVert, i1, y);
               y += h; ctx.fillText('screen size (m): ' +
-                  info.screenSizeHorz + 'x' + info.screenSizeVert, i1, y);
+                  hmdInfo.screenSizeHorz + 'x' + hmdInfo.screenSizeVert, i1, y);
               y += h; ctx.fillText('screen center (m): ' +
-                  info.screenCenterVert, i1, y);
+                  hmdInfo.screenCenterVert, i1, y);
               y += h; ctx.fillText('eye-to-screen (m): ' +
-                  info.eyeToScreenDistance, i1, y);
+                  hmdInfo.eyeToScreenDistance, i1, y);
               y += h; ctx.fillText('lens separation (m): ' +
-                  info.lensSeparationDistance, i1, y);
+                  hmdInfo.lensSeparationDistance, i1, y);
               y += h; ctx.fillText('IPD (m): ' +
-                  info.interpupillaryDistance, i1, y);
+                  hmdInfo.interpupillaryDistance, i1, y);
               y += h; ctx.fillText('desktop position (px): ' +
-                  info.desktopX + ',' + info.desktopY, i1, y);
+                  hmdInfo.desktopX + ',' + hmdInfo.desktopY, i1, y);
               y += h; ctx.fillText('distortion k: ' +
-                  info.distortionK[0] + ',' +
-                  info.distortionK[1] + ',' +
-                  info.distortionK[2] + ',' +
-                  info.distortionK[3] + ',', i1, y);
+                  hmdInfo.distortionK[0] + ',' +
+                  hmdInfo.distortionK[1] + ',' +
+                  hmdInfo.distortionK[2] + ',' +
+                  hmdInfo.distortionK[3] + ',', i1, y);
             }
             y += h; ctx.fillText('rotation:', i1, y);
-            y += h; ctx.fillText(state.oculus.rotation[0], i2, y);
-            y += h; ctx.fillText(state.oculus.rotation[1], i2, y);
-            y += h; ctx.fillText(state.oculus.rotation[2], i2, y);
-            y += h; ctx.fillText(state.oculus.rotation[3], i2, y);
+            y += h; ctx.fillText(state.hmd.rotation[0], i2, y);
+            y += h; ctx.fillText(state.hmd.rotation[1], i2, y);
+            y += h; ctx.fillText(state.hmd.rotation[2], i2, y);
+            y += h; ctx.fillText(state.hmd.rotation[3], i2, y);
           } else {
             y += h; ctx.fillText('oculus rift not detected', 0, y);
-            latestOculusInfo = null;
           }
 
           requestAnimationFrame.call(window, tick);

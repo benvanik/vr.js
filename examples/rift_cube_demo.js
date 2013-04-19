@@ -269,7 +269,7 @@ var StereoParams = function() {
 
 /**
  * Updates the stereo parameters with the given HMD data.
- * @param {!vr.VROculusInfo} info HMD info.
+ * @param {!vr.HmdInfo} info HMD info.
  */
 StereoParams.prototype.update = function(info) {
   var aspect = info.resolutionHorz / info.resolutionVert / 2;
@@ -395,10 +395,10 @@ var StereoRenderer = function(gl, opt_attributes) {
   /**
    * Current HMD info.
    * If no HMD is present this is set to the default info used for testing.
-   * @type {!vr.VROculusInfo}
+   * @type {!vr.HmdInfo}
    * @private
    */
-  this.hmdInfo_ = new vr.VROculusInfo();
+  this.hmdInfo_ = new vr.HmdInfo();
 
   /**
    * 2D quad data buffer.
@@ -657,16 +657,15 @@ StereoRenderer.prototype.setEyeToScreenDistance = function(value) {
 StereoRenderer.prototype.render = function(vrstate, callback, opt_scope) {
   var gl = this.gl_;
 
-  var nowPresent = vrstate.oculus.present;
+  var nowPresent = vrstate.hmd.present;
   if (nowPresent != this.hmdPresent_) {
     this.hmdPresent_ = true;
     if (nowPresent) {
       // HMD connected! Query info.
-      this.hmdInfo_ = vr.queryOculusInfo() || new vr.VROculusInfo();
-      console.log('oculus detected');
+      this.hmdInfo_ = vr.getHmdInfo();
     } else {
       // Disconnected. Reset to defaults.
-      this.hmdInfo_ = new vr.VROculusInfo();
+      this.hmdInfo_ = new vr.HmdInfo();
     }
     this.initialize_();
   }
@@ -929,9 +928,9 @@ var Camera = function() {
 Camera.prototype.update = function(time, timeDelta, vrstate) {
   // Read sensor data, if present.
   var rollPitchYaw = mat4.create();
-  if (vrstate.oculus.present) {
+  if (vrstate.hmd.present) {
     // TODO(benvanik): real work
-    mat4.fromQuat(rollPitchYaw, vrstate.oculus.rotation);
+    mat4.fromQuat(rollPitchYaw, vrstate.hmd.rotation);
   } else {
     mat4.identity(rollPitchYaw);
   }
@@ -1009,10 +1008,10 @@ var Demo = function(statusEl, canvas) {
 
   /**
    * VR state.
-   * @type {!vr.VRState}
+   * @type {!vr.State}
    * @private
    */
-  this.vrstate_ = vr.createState();
+  this.vrstate_ = new vr.State();
 
   /**
    * Time of the previous tick.
@@ -1158,13 +1157,13 @@ Demo.prototype.keyPressed_ = function(e) {
   switch (e.keyCode) {
     case 32: // space
       // Reset sensors to their default state.
-      vr.resetOculusOrientation();
+      vr.resetHmdOrientation();
       return true;
 
     case 70: // f
       // Toggle fullscreen mode.
       if (!vr.isFullScreen()) {
-        vr.beginFullScreen();
+        vr.enterFullScreen();
       } else {
         vr.exitFullScreen();
       }
@@ -1212,9 +1211,7 @@ Demo.prototype.tick_ = function() {
   });
 
   // Poll VR, if it's ready.
-  if (vr.isReady) {
-    vr.poll(this.vrstate_);
-  }
+  vr.poll(this.vrstate_);
 
   // TODO(benvanik): now(), if possible.
   var time = Date.now();
@@ -1291,16 +1288,25 @@ Demo.prototype.renderScene_ = function(width, height, eye) {
  * Launches the demo.
  * @param {!Element} statusEl Element that will get status text.
  * @param {!HTMLCanvasElement} canvas Target render canvas.
- * @return {Object} Demo object, useful for debugging only.
  */
 global.launchDemo = function(statusEl, canvas) {
-  try {
-    return new Demo(statusEl, canvas);
-  } catch (e) {
-    statusEl.innerText = e.toString();
-    console.log(e);
-    return null;
+  if (!vr.isInstalled) {
+    statusEl.innerText = 'NPVR plugin not installed!';
+    return;
   }
+  vr.load(function(error) {
+    if (error) {
+      statusEl.innerText = 'Plugin load failed: ' + error.toString();
+      return;
+    }
+
+    try {
+      new Demo(statusEl, canvas);
+    } catch (e) {
+      statusEl.innerText = e.toString();
+      console.log(e);
+    }
+  });
 };
 
 })(window);
