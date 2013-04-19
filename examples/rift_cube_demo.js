@@ -631,6 +631,9 @@ StereoRenderer.prototype.render = function(vrstate, callback, opt_scope) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     this.renderEye_(eye);
   }
+
+  // User shouldn't be doing anything after this. Flush now.
+  gl.flush();
 };
 
 
