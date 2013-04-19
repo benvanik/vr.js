@@ -769,7 +769,7 @@ StereoRenderer.WARP_FRAGMENT_SOURCE_ = [
   '  vec2 tc = hmdWarp(v_uv);',
   '  if (any(notEqual(clamp(tc, u_screenCenter - vec2(0.25, 0.5), ',
   '      u_screenCenter + vec2(0.25, 0.5)) - tc, vec2(0.0, 0.0)))) {',
-  '    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);',
+  '    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);',
   '  } else {',
   //'    gl_FragColor = vec4(0.0, tc.xy, 1.0);',
   '    gl_FragColor = texture2D(u_tex0, tc);',
@@ -1155,7 +1155,11 @@ Demo.prototype.renderScene_ = function(width, height, eye) {
   this.cubeProgram_.use();
 
   var modelViewMatrix = mat4.create();
-  mat4.multiply(modelViewMatrix, this.camera_.viewMatrix, eye.viewAdjustMatrix);
+  mat4.identity(modelViewMatrix);
+  vec3.set(tmpVec3, 50, 25, 50);
+  mat4.scale(modelViewMatrix, modelViewMatrix, tmpVec3);
+  mat4.multiply(modelViewMatrix, modelViewMatrix, this.camera_.viewMatrix);
+  mat4.multiply(modelViewMatrix, modelViewMatrix, eye.viewAdjustMatrix);
 
   gl.uniformMatrix4fv(this.cubeProgram_.uniforms['u_projectionMatrix'], false,
       eye.projectionMatrix);
