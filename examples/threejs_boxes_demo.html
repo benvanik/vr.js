@@ -107,8 +107,26 @@
 			// 	instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
 			// }
 
-			init();
-			animate();
+			if (!vr.isInstalled) {
+				//statusEl.innerText = 'NPVR plugin not installed!';
+				alert('NPVR plugin not installed!');
+				return;
+			}
+			vr.load(function(error) {
+				if (error) {
+					//statusEl.innerText = 'Plugin load failed: ' + error.toString();
+					alert('Plugin load failed: ' + error.toString());
+					return;
+				}
+
+				try {
+					init();
+					animate();
+				} catch (e) {
+					//statusEl.innerText = e.toString();
+					console.log(e);
+				}
+			});
 
 			function init() {
 
@@ -237,21 +255,21 @@
 
 					case 70:
 						if (!vr.isFullScreen()) {
-							vr.beginFullScreen();
+							vr.enterFullScreen();
 						} else {
 							vr.exitFullScreen();
 						}
-            e.preventDefault();
+						e.preventDefault();
 						break;
 
-          case 32:
-            vr.resetHmdOrientation();
-            e.preventDefault();
-            break;
+					case 32:
+						vr.resetHmdOrientation();
+						e.preventDefault();
+						break;
 				}
 			}
 
-			var vrstate = vr.createState();
+			var vrstate = new vr.State();
 			function animate() {
 				requestAnimationFrame( animate );
 
@@ -269,13 +287,11 @@
 				}
 
 				// Poll VR, if it's ready.
-        if (vr.isReady) {
-          vr.poll(vrstate);
-        }
-				controls.update( Date.now() - time, vr.isReady ? vrstate : null );
+				var polled = vr.poll(vrstate);
+				controls.update( Date.now() - time, polled ? vrstate : null );
 
 				//renderer.render( scene, camera );
-				effect.render( scene, camera, vr.isReady ? vrstate : null );
+				effect.render( scene, camera, polled ? vrstate : null );
 
 				time = Date.now();
 			}
