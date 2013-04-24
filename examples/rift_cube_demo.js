@@ -268,6 +268,22 @@ var StereoRenderer = function(gl, opt_attributes) {
   this.framebufferAttachments_ = [];
 
   /**
+   * The width of the render target used for drawing the scene.
+   * Managed by {@see #initialize_}.
+   * @type {number}
+   * @private
+   */
+  this.renderTargetWidth_ = 0;
+
+  /**
+   * The height of the render target used for drawing the scene.
+   * Managed by {@see #initialize_}.
+   * @type {number}
+   * @private
+   */
+  this.renderTargetHeight_ = 0;
+
+  /**
    * Render texture used for drawing the scene.
    * Managed by {@see #initialize_}.
    * @type {!WebGLTexture}
@@ -302,6 +318,17 @@ StereoRenderer.Attributes;
 
 
 /**
+ * The render target used for rendering the scene will be this much larger
+ * than the HMD's resolution, to compensate for the resolution loss from the
+ * warping shader.
+ * @type {number}
+ * @const
+ * @private
+ */
+StereoRenderer.RENDER_TARGET_SCALE_ = 2;
+
+
+/**
  * Disposes the object.
  */
 StereoRenderer.prototype.dispose = function() {
@@ -332,7 +359,9 @@ StereoRenderer.prototype.initialize_ = function() {
   gl.canvas.style.height = canvas.height + 'px';
 
   // Resize framebuffer and validate.
-  this.setupRenderTarget_(info.resolutionHorz, info.resolutionVert);
+  this.setupRenderTarget_(
+      info.resolutionHorz * StereoRenderer.RENDER_TARGET_SCALE_,
+      info.resolutionVert * StereoRenderer.RENDER_TARGET_SCALE_);
 
   // Update program uniforms next render.
   this.updateAllUniforms_ = true;
@@ -349,6 +378,9 @@ StereoRenderer.prototype.initialize_ = function() {
  */
 StereoRenderer.prototype.setupRenderTarget_ = function(width, height) {
   var gl = this.gl_;
+
+  this.renderTargetWidth_ = width;
+  this.renderTargetHeight_ = height;
 
   var previousFramebuffer = gl.getParameter(gl.FRAMEBUFFER_BINDING);
   var previousRenderbuffer = gl.getParameter(gl.RENDERBUFFER_BINDING);
@@ -476,12 +508,13 @@ StereoRenderer.prototype.render = function(vrstate, callback, opt_scope) {
     // Render to the render target.
     // The user will clear if needed.
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer_);
-    var fullWidth = this.hmdInfo_.resolutionHorz;
-    var fullHeight = this.hmdInfo_.resolutionVert;
     gl.viewport(
-        eye.viewport[0] * fullWidth, eye.viewport[1] * fullHeight,
-        eye.viewport[2] * fullWidth, eye.viewport[3] * fullHeight);
-    callback.call(opt_scope, fullWidth, fullHeight, eye);
+        eye.viewport[0] * this.renderTargetWidth_,
+        eye.viewport[1] * this.renderTargetHeight_,
+        eye.viewport[2] * this.renderTargetWidth_,
+        eye.viewport[3] * this.renderTargetHeight_);
+    callback.call(opt_scope,
+        this.renderTargetWidth_, this.renderTargetHeight_, eye);
     gl.flush();
 
     // Distort to the screen.
@@ -1039,10 +1072,10 @@ Demo.prototype.renderScene_ = function(width, height, eye) {
 
   var modelViewMatrix = mat4.create();
   mat4.identity(modelViewMatrix);
-  vec3.set(tmpVec3, 50, 50, 50);
+  vec3.set(tmpVec3, 5, 5, 5);
   mat4.scale(modelViewMatrix, modelViewMatrix, tmpVec3);
   mat4.multiply(modelViewMatrix, modelViewMatrix, this.camera_.viewMatrix);
-  mat4.multiply(modelViewMatrix, modelViewMatrix, eye.viewAdjustMatrix);
+  mat4.multiply(modelViewMatrix, eye.viewAdjustMatrix, modelViewMatrix);
 
   gl.uniformMatrix4fv(this.cubeProgram_.uniforms['u_projectionMatrix'], false,
       eye.projectionMatrix);
