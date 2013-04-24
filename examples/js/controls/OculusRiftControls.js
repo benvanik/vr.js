@@ -7,12 +7,9 @@ THREE.OculusRiftControls = function ( camera ) {
 
 	var scope = this;
 
-	var pitchObject = new THREE.Object3D();
-	pitchObject.add( camera );
-
-	var yawObject = new THREE.Object3D();
-	yawObject.position.y = 10;
-	yawObject.add( pitchObject );
+	var moveObject = new THREE.Object3D();
+	moveObject.position.y = 10;
+	moveObject.add( camera );
 
 	var moveForward = false;
 	var moveBackward = false;
@@ -26,8 +23,12 @@ THREE.OculusRiftControls = function ( camera ) {
 
 	var PI_2 = Math.PI / 2;
 
-	this.moveSpeed = 0.12 / 2;
-	this.jumpSpeed = 3;
+	this.moveSpeed = 0.12 / 4;
+	this.jumpSpeed = 2;
+
+	var _q1 = new THREE.Quaternion();
+	var axisX = new THREE.Vector3( 1, 0, 0 );
+	var axisZ = new THREE.Vector3( 0, 0, 1 );
 
 	var onMouseMove = function ( event ) {
 
@@ -38,11 +39,10 @@ THREE.OculusRiftControls = function ( camera ) {
 
 		console.log(movementX, movementY);
 
-		yawObject.rotation.y -= movementX * 0.002;
-		pitchObject.rotation.x -= movementY * 0.002;
-
-		pitchObject.rotation.x = Math.max( - PI_2, Math.min( PI_2, pitchObject.rotation.x ) );
-
+		_q1.setFromAxisAngle( axisZ, movementX * 0.002 );
+		moveObject.quaternion.multiplySelf( _q1 );
+		_q1.setFromAxisAngle( axisX, movementY * 0.002 );
+		moveObject.quaternion.multiplySelf( _q1 );
 	};
 
 	var onKeyDown = function ( event ) {
@@ -113,7 +113,7 @@ THREE.OculusRiftControls = function ( camera ) {
 
 	this.getObject = function () {
 
-		return yawObject;
+		return moveObject;
 
 	};
 
@@ -127,8 +127,6 @@ THREE.OculusRiftControls = function ( camera ) {
 	this.update = function ( delta, vrstate ) {
 
 		//if ( scope.enabled === false ) return;
-
-		// TODO: use vrstate to compute look
 
 		delta *= 0.1;
 
@@ -149,14 +147,30 @@ THREE.OculusRiftControls = function ( camera ) {
 
 		}
 
-		yawObject.translateX( velocity.x );
-		yawObject.translateY( velocity.y );
-		yawObject.translateZ( velocity.z );
+		var rotation = new THREE.Quaternion();
+		var angles = new THREE.Vector3();
+		if (vrstate) {
+			rotation.set(
+					vrstate.hmd.rotation[0],
+					vrstate.hmd.rotation[1],
+					vrstate.hmd.rotation[2],
+					vrstate.hmd.rotation[3]);
+			angles.setEulerFromQuaternion(rotation, 'XYZ');
+			angles.z = 0;
+			angles.normalize();
+			rotation.setFromEuler(angles, 'XYZ');
+			rotation.normalize();
+			// velocity.applyQuaternion(rotation);
+		}
 
-		if ( yawObject.position.y < 10 ) {
+		moveObject.translateX( velocity.x );
+		moveObject.translateY( velocity.y );
+		moveObject.translateZ( velocity.z );
+
+		if ( moveObject.position.y < 10 ) {
 
 			velocity.y = 0;
-			yawObject.position.y = 10;
+			moveObject.position.y = 10;
 
 			canJump = true;
 
