@@ -48,7 +48,8 @@ possible.
 * Raw Data: `examples/raw_data.html`
 * Sixense Data Visualization: `examples/sixense_viz.html`
 * Rift Data Visualization: `examples/rift_viz.html`
-* Three.js Cube Demo: `examples/cube_demo.html`
+* Simple WebGL Demo: `examples/rift_cube_demo.html`
+* Three.js Floating Boxes Demo: `examples/threejs_boxes_demo.html`
 
 ## Building
 
