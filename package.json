@@ -1,0 +1,14 @@
+{
+  "name": "vrjs",
+  "version": "0.0.1",
+  "main": "lib",
+  "scripts": {
+  },
+  "license": "BSD",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "uglify-js": "*",
+    "jsdoc": "git://github.com/jsdoc3/jsdoc.git"
+  }
+}

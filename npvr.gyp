@@ -17,7 +17,7 @@
     ],
     'third_party_lib_paths': [
       '../../third_party/sixense/lib/win32/release_dll/',
-	  '../../third_party/oculus-sdk/LibOVR/Lib/Win32',
+      '../../third_party/oculus-sdk/LibOVR/Lib/Win32',
     ],
     'third_party_libs': [
       'sixense.lib',
