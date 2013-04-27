@@ -101,6 +101,8 @@ void VRObject::QueryHmdInfo(const char* command_str, std::ostringstream& s) {
 
   const OVR::HMDInfo& info = *manager->GetDeviceInfo();
 
+  s << info.ProductName << "," << info.Manufacturer << "," << info.Version << ",";
+  s << info.DesktopX << "," << info.DesktopY << ",";
   s << info.HResolution << "," << info.VResolution << ",";
   s << info.HScreenSize << "," << info.VScreenSize << ",";
   s << info.VScreenCenter << ",";
@@ -111,7 +113,10 @@ void VRObject::QueryHmdInfo(const char* command_str, std::ostringstream& s) {
   s << info.DistortionK[1] << ",";
   s << info.DistortionK[2] << ",";
   s << info.DistortionK[3] << ",";
-  s << info.DesktopX << "," << info.DesktopY;
+  s << info.ChromaAbCorrection[0] << ",";
+  s << info.ChromaAbCorrection[1] << ",";
+  s << info.ChromaAbCorrection[2] << ",";
+  s << info.ChromaAbCorrection[3];
 }
 
 void VRObject::ResetHmdOrientation(const char* command_str, std::ostringstream& s) {

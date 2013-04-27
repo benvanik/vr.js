@@ -338,6 +338,22 @@ Demo.prototype.keyPressed_ = function(e) {
       this.stereoRenderer_.setInterpupillaryDistance(ipd);
       this.setStatus('ipd: ' + ipd);
       break;
+
+    case 80: // p
+      var mode = this.stereoRenderer_.getPostProcessingMode();
+      switch (mode) {
+        case vr.PostProcessingMode.STRAIGHT:
+          mode = vr.PostProcessingMode.WARP;
+          break;
+        case vr.PostProcessingMode.WARP:
+          mode = vr.PostProcessingMode.WARP_CHROMEAB;
+          break;
+        case vr.PostProcessingMode.WARP_CHROMEAB:
+          mode = vr.PostProcessingMode.STRAIGHT;
+          break;
+      }
+      this.stereoRenderer_.setPostProcessingMode(mode);
+      break;
   }
   return false;
 };
