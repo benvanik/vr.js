@@ -2,19 +2,6 @@
 
 (function(global) {
 
-/**
- * requestAnimationFrame, if supported.
- * Must be called on the global object.
- * @type {function(function())}
- */
-global.requestAnimationFrame =
-    global.requestAnimationFrame ||
-    global.webkitRequestAnimationFrame ||
-    global.mozRequestAnimationFrame ||
-    global.oRequestAnimationFrame ||
-    global.msRequestAnimationFrame ||
-    null;
-
 
 var tmpVec3 = vec3.create();
 var tmpMat4 = mat4.create();
@@ -75,7 +62,7 @@ var Camera = function() {
  * Updates the camera based on the current state.
  * @param {number} time Current time.
  * @param {number} timeDelta time since last frame.
- * @param {!vr.VRState} vrstate Current vr state.
+ * @param {!vr.State} vrstate Current vr state.
  */
 Camera.prototype.update = function(time, timeDelta, vrstate) {
   // Read sensor data, if present.
@@ -365,13 +352,10 @@ Demo.prototype.keyPressed_ = function(e) {
  */
 Demo.prototype.tick_ = function() {
   // Schedule the next frame.
-  var self = this;
-  global.requestAnimationFrame(function() {
-    self.tick_();
-  });
+  vr.requestAnimationFrame(this.tick_, this);
 
   // Poll VR, if it's ready.
-  vr.poll(this.vrstate_);
+  vr.pollState(this.vrstate_);
 
   // TODO(benvanik): now(), if possible.
   var time = Date.now();
@@ -407,12 +391,12 @@ Demo.prototype.updateScene_ = function(time, timeDelta) {
 /**
  * Renders the entire scene.
  * This may be called multiple times per frame.
+ * @param {!StereoEye} eye Eye being rendered.
  * @param {number} width Render target width.
  * @param {number} height Render target height.
- * @param {!StereoEye} eye Eye being rendered.
  * @private
  */
-Demo.prototype.renderScene_ = function(width, height, eye) {
+Demo.prototype.renderScene_ = function(eye, width, height) {
   var gl = this.gl_;
 
   gl.clearColor(0, 0, 0, 1);
@@ -450,7 +434,7 @@ Demo.prototype.renderScene_ = function(width, height, eye) {
  * @param {!HTMLCanvasElement} canvas Target render canvas.
  */
 global.launchDemo = function(statusEl, canvas) {
-  if (!vr.isInstalled) {
+  if (!vr.isInstalled()) {
     statusEl.innerText = 'NPVR plugin not installed!';
     return;
   }

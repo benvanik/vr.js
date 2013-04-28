@@ -1,4 +1,5 @@
-REM TODO: gyp and msbuild
+@echo off
+ECHO TODO: gyp and msbuild
 
 copy manifest.json build\npvr\debug\
 copy third_party\sixense\bin\win32\release_dll\sixense.dll build\npvr\debug\

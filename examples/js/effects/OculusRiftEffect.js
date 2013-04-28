@@ -50,24 +50,8 @@ THREE.OculusRiftEffect = function(renderer) {
   this.eyeCamera_ = new THREE.PerspectiveCamera();
   this.eyeCamera_.matrixAutoUpdate = false;
 
-  /**
-   * A render target the size of the display that will receive both eye views.
-   * @type {THREE.WebGLRenderTarget}
-   * @private
-   */
-  this.renderTarget_ = null;
-
   // Initialize the renderer (with defaults).
   this.init_(vr.HmdInfo.DEFAULT);
-};
-
-
-/**
- * Eyes.
- */
-THREE.OculusRiftEffect.Eye = {
-  LEFT: 0,
-  RIGHT: 1
 };
 
 
@@ -151,8 +135,7 @@ THREE.OculusRiftEffect.prototype.render = function(scene, camera, vrstate) {
   };
 
   // Render eyes.
-  this.stereoRenderer_.render(vrstate || this.dummyState_, function(
-      width, height, eye) {
+  this.stereoRenderer_.render(vrstate || this.dummyState_, function(eye) {
     var eyeCamera = this.eyeCamera_;
     convertMatrix(eye.projectionMatrix, eyeCamera.projectionMatrix);
     var viewAdjustMatrix = new THREE.Matrix4();

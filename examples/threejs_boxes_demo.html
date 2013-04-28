@@ -108,7 +108,7 @@
 			// 	instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
 			// }
 
-			if (!vr.isInstalled) {
+			if (!vr.isInstalled()) {
 				//statusEl.innerText = 'NPVR plugin not installed!';
 				alert('NPVR plugin not installed!');
 				return;
@@ -196,7 +196,7 @@
 
 				}
 
-				for ( var i = 0; i < 500; i ++ ) {
+				for ( var i = 0; i < 250; i ++ ) {
 
 					material = new THREE.MeshPhongMaterial( { specular: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors } );
 
@@ -272,7 +272,7 @@
 
 			var vrstate = new vr.State();
 			function animate() {
-				requestAnimationFrame( animate );
+				vr.requestAnimationFrame(animate);
 
 				controls.isOnObject( false );
 
@@ -288,7 +288,7 @@
 				}
 
 				// Poll VR, if it's ready.
-				var polled = vr.poll(vrstate);
+				var polled = vr.pollState(vrstate);
 				controls.update( Date.now() - time, polled ? vrstate : null );
 
 				//renderer.render( scene, camera );

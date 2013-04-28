@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>NPVR Raw Data</title>
+    <title>vr.js Raw Data</title>
     <script src="../lib/vr.js"></script>
   </head>
   <body>
     <canvas id="canvas" width="400" height="600"></canvas>
 
     <script>
-      var requestAnimationFrame =
-          window.requestAnimationFrame ||
-          window.mozRequestAnimationFrame ||
-          window.webkitRequestAnimationFrame;
-
       var canvas = document.getElementById('canvas');
       var ctx = canvas.getContext('2d');
 
-      vr.load(function() {
-        if (vr.error) {
-          window.alert('VR error:\n' + vr.error.toString());
+      vr.load(function(error) {
+        if (error) {
+          window.alert('VR error:\n' + error.toString());
           return;
         }
         console.log('npvr ready!');
 
         var state = new vr.State();
         function tick() {
-          vr.poll(state);
+          vr.pollState(state);
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.fillStyle = 'black';
@@ -145,9 +140,9 @@
             y += h; ctx.fillText('oculus rift not detected', 0, y);
           }
 
-          requestAnimationFrame.call(window, tick);
+          vr.requestAnimationFrame(tick);
         };
-        requestAnimationFrame.call(window, tick);
+        vr.requestAnimationFrame(tick);
       });
     </script>
   </body>

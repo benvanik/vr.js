@@ -6,6 +6,14 @@ An experimental NPAPI plugin for Chrome and Firefox that exposes fun VR devices.
 * [Razer Hydra](http://www.razerzone.com/gaming-controllers/razer-hydra)
 * [Oculus Rift Development Kit](https://www.oculusvr.com/)
 
+## Supported Platforms
+
+* Windows
+  * Chrome 26+
+  * Firefox 20
+
+OSX support coming soon!
+
 ## Installing
 
 * Download the [repository ZIP](https://github.com/benvanik/vr.js/archive/master.zip)
@@ -19,6 +27,14 @@ An experimental NPAPI plugin for Chrome and Firefox that exposes fun VR devices.
   * Open Chrome to `chrome://extensions`
   * Check 'Developer mode' and click 'Load unpacked extension'
   * Select the `bin\` folder in the path you extracted the ZIP into
+
+## Demos
+
+* Raw Data: `examples/raw_data.html`
+* Sixense Sensor Data Visualization: `examples/sixense_sensor_viz.html`
+* Rift Sensor Data Visualization: `examples/rift_sensor_viz.html`
+* Simple WebGL Demo: `examples/rift_cube_demo.html`
+* Three.js Floating Boxes Demo: `examples/threejs_boxes_demo.html`
 
 ## Tips
 
@@ -43,14 +59,6 @@ This removes a frame of latency.
 Use `requestAnimationFrame` for your rendering and always render as fast as
 possible.
 
-## Demos
-
-* Raw Data: `examples/raw_data.html`
-* Sixense Data Visualization: `examples/sixense_viz.html`
-* Rift Data Visualization: `examples/rift_viz.html`
-* Simple WebGL Demo: `examples/rift_cube_demo.html`
-* Three.js Floating Boxes Demo: `examples/threejs_boxes_demo.html`
-
 ## Building
 
 ### Windows
@@ -59,7 +67,7 @@ Visual Studio 2010 or 2012 is required for building on Windows. The Express
 editions should work, just make sure to get the VC++ 2012 for Desktop variant.
 Other dependencies are included in the repo.
 
-Uninstall any previous installation before continuing.
+Uninstall any previous installation of the npvr DLL before continuing.
 
 Check out the git repo and generate the Visual Studio projects:
 
@@ -67,9 +75,9 @@ Check out the git repo and generate the Visual Studio projects:
     cd vr.js
     git submodule init
     git submodule update
-    run-gyp.bat
+    make-gyp.bat
 
-Open `build\npvr\npvr.sln` and build. The outputs will be placed into
+Open `build\npvr\vs2010\npvr.sln` and build. The outputs will be placed into
 `build\npvr\Debug\`.
 
 Run the following to prepare the debug version and register it with Firefox:
@@ -113,3 +121,8 @@ Launch, open the page, and attach to firefox.exe in Visual Studio.
 ## License
 
 BSD, except the np_* code.
+
+## Credits
+
+A lot of the code comes from the official Oculus SDK. Some math snippets from
+[Brandon Jones's gl-matrix](https://github.com/toji/gl-matrix).

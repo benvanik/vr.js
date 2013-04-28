@@ -1,4 +1,5 @@
-REM TODO: gyp and msbuild
+@echo off
+ECHO TODO: gyp and msbuild
 
 copy manifest.json bin\
 copy third_party\sixense\bin\win32\release_dll\sixense.dll bin\
