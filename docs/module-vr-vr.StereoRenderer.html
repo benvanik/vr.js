@@ -198,7 +198,24 @@ Responsible for setting up stereo rendering and drawing the scene each frame.</p
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>// Create a renderer with just a depth channel.var stereoRenderer = new vr.StereoRenderer(gl, {  alpha: false,  depth: true,  stencil: false});var state = new vr.State();function renderScene() {  vr.pollState(state);  // TODO: process camera/controls/etc.  stereoRenderer.render(state, function(eye) {    // Compute the model-view matrix from the camera and the eye view adjust.    var modelViewMatrix = mat4.clone(camera.modelViewMatrix);    mat4.multiply(modelViewMatrix, eye.viewAdjustMatrix, modelViewMatrix);    // Render using the eye projection matrix and the new model-view matrix.    renderMyScene(eye.projection, modelViewMatrix);  });};</code></pre>
+    <pre class="prettyprint"><code>// Create a renderer with just a depth channel.
+var stereoRenderer = new vr.StereoRenderer(gl, {
+  alpha: false,
+  depth: true,
+  stencil: false
+});
+var state = new vr.State();
+function renderScene() {
+  vr.pollState(state);
+  // TODO: process camera/controls/etc.
+  stereoRenderer.render(state, function(eye) {
+    // Compute the model-view matrix from the camera and the eye view adjust.
+    var modelViewMatrix = mat4.clone(camera.modelViewMatrix);
+    mat4.multiply(modelViewMatrix, eye.viewAdjustMatrix, modelViewMatrix);
+    // Render using the eye projection matrix and the new model-view matrix.
+    renderMyScene(eye.projectionMatrix, modelViewMatrix);
+  });
+};</code></pre>
 
     
 </dd>
