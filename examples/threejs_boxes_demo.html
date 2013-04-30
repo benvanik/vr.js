@@ -110,13 +110,11 @@
 			if (!vr.isInstalled()) {
 				//statusEl.innerText = 'NPVR plugin not installed!';
 				alert('NPVR plugin not installed!');
-				return;
 			}
 			vr.load(function(error) {
 				if (error) {
 					//statusEl.innerText = 'Plugin load failed: ' + error.toString();
 					alert('Plugin load failed: ' + error.toString());
-					return;
 				}
 
 				try {
