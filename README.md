@@ -36,6 +36,12 @@ OSX support coming soon!
 * Simple WebGL Demo: `examples/rift_cube_demo.html`
 * Three.js Floating Boxes Demo: `examples/threejs_boxes_demo.html`
 
+## Documentation
+
+Code is heavily commented - it's best to read that.
+
+If you want fancy HTML docs, see the [Online Documentation](http://benvanik.github.io/vr.js/docs/vr.html).
+
 ## Tips
 
 ### Calibration
