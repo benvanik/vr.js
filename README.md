@@ -8,7 +8,7 @@ but also handles more advanced things like computing all the math required for
 rendering lens distorted scenes. If you want, it even has a slick API for easily
 rendering the distored scene that should be easy to drop into any WebGL
 application. There's also an example three.js wrapper under
-[examples\js\effects\](https://github.com/benvanik/vr.js/tree/master/examples/js/effects) that works pretty well.
+[examples/js/effects/](https://github.com/benvanik/vr.js/tree/master/examples/js/effects) that works pretty well.
 
 Oh, and though it's possible to use node and WebSockets to get the sensor data
 I don't recommend it - the latency is simply too high (~10ms). This plugin
@@ -47,11 +47,16 @@ OSX support coming soon!
 
 You must have the plugin installed before they will run:
 
-* [Raw Data](http://benvanik.github.io/vr.js/examples/raw_data.html): [examples/raw_data.html](https://github.com/benvanik/vr.js/blob/master/examples/raw_data.html)
-* [Sixense Sensor Data Visualization](http://benvanik.github.io/vr.js/examples/sixense_sensor_viz.html): [examples/sixense_sensor_viz.html](https://github.com/benvanik/vr.js/blob/master/examples/sixense_sensor_viz.html)
-* [Rift Sensor Data Visualization](http://benvanik.github.io/vr.js/examples/rift_sensor_viz.html): [examples/rift_sensor_viz.html](https://github.com/benvanik/vr.js/blob/master/examples/rift_sensor_viz.html)
-* [Simple WebGL Demo](http://benvanik.github.io/vr.js/examples/rift_cube_demo.html): [examples/rift_cube_demo.html/js](https://github.com/benvanik/vr.js/blob/master/examples/rift_cube_demo.js)
-* [Three.js Floating Boxes Demo](http://benvanik.github.io/vr.js/examples/threejs_boxes_demo.html): [examples/threejs_boxes_demo.html](https://github.com/benvanik/vr.js/blob/master/examples/threejs_boxes_demo.html)
+* [Raw Data](http://benvanik.github.io/vr.js/examples/raw_data.html)
+  * Source: [examples/raw_data.html](https://github.com/benvanik/vr.js/blob/master/examples/raw_data.html)
+* [Sixense Sensor Data Visualization](http://benvanik.github.io/vr.js/examples/sixense_sensor_viz.html)
+  * Source: [examples/sixense_sensor_viz.html](https://github.com/benvanik/vr.js/blob/master/examples/sixense_sensor_viz.html)
+* [Rift Sensor Data Visualization](http://benvanik.github.io/vr.js/examples/rift_sensor_viz.html)
+  * Source: [examples/rift_sensor_viz.html](https://github.com/benvanik/vr.js/blob/master/examples/rift_sensor_viz.html)
+* [Simple WebGL Demo](http://benvanik.github.io/vr.js/examples/rift_cube_demo.html)
+  * Source: [examples/rift_cube_demo.js](https://github.com/benvanik/vr.js/blob/master/examples/rift_cube_demo.js)
+* [Three.js Floating Boxes Demo](http://benvanik.github.io/vr.js/examples/threejs_boxes_demo.html)
+  * Source: [examples/threejs_boxes_demo.html](https://github.com/benvanik/vr.js/blob/master/examples/threejs_boxes_demo.html)
 
 ## Documentation
 
