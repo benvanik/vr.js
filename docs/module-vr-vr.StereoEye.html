@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: StereoEye</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Class: StereoEye</h1>
+    
+    
+
+
+
+<section>
+    
+<header>
+    <h2>
+    StereoEye
+    </h2>
+    
+</header>  
+
+<article>
+    <div class="container-overview">
+    
+    
+    
+        
+<dt>
+    <h4 class="name" id="StereoEye"><span class="type-signature"></span>new StereoEye<span class="signature">(left, top, width, height)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>An eye.
+Contains matrices used when rendering the viewport.</p>
+<p>You should not create this directly. Instead, use the
+vr.StereoParams#getEyes to get eyes that have their information
+updated automatically.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>left</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>Left, in [0-1] view coordinates.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>top</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>Top, in [0-1] view coordinates.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>width</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>Width, in [0-1] view coordinates.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>height</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>Height, in [0-1] view coordinates.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        vr.js, line 1474
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="distortionCenterOffsetX"><span class="type-signature">&lt;readonly> </span>distortionCenterOffsetX<span class="type-signature"> :number</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Eye-specific distortion center X.</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        vr.js, line 1488
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="distortionCenterOffsetY"><span class="type-signature">&lt;readonly> </span>distortionCenterOffsetY<span class="type-signature"> :number</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Eye-specific distortion center Y.</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">number</span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        vr.js, line 1495
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="orthoProjectionMatrix"><span class="type-signature">&lt;readonly> </span>orthoProjectionMatrix<span class="type-signature"> :<a href="vr.mat4f.html#Type">vr.mat4f.Type</a></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Matrix used for drawing 2D things, like HUDs.</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="vr.mat4f.html#Type">vr.mat4f.Type</a></span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        vr.js, line 1516
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="projectionMatrix"><span class="type-signature">&lt;readonly> </span>projectionMatrix<span class="type-signature"> :<a href="vr.mat4f.html#Type">vr.mat4f.Type</a></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Matrix used for drawing 3D things.</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="vr.mat4f.html#Type">vr.mat4f.Type</a></span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        vr.js, line 1502
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="viewAdjustMatrix"><span class="type-signature">&lt;readonly> </span>viewAdjustMatrix<span class="type-signature"> :<a href="vr.mat4f.html#Type">vr.mat4f.Type</a></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Translation to be applied to the view matrix.</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="vr.mat4f.html#Type">vr.mat4f.Type</a></span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        vr.js, line 1509
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="viewport"><span class="type-signature">&lt;readonly> </span>viewport<span class="type-signature"> :!Array.&lt;number></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>2D viewport used when compositing, in [0-1] view coordinates.
+Stored as [left, top, width, height].</p>
+    </div>
+    
+    
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">!Array.&lt;number></span>
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        vr.js, line 1481
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+    
+    
+    
+    
+</article>
+
+</section>  
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-vr.html">vr</a></li></ul><h3>Classes</h3><ul><li><a href="module-vr-vr.HmdInfo.html">HmdInfo</a></li><li><a href="module-vr-vr.HmdState.html">HmdState</a></li><li><a href="module-vr-vr.Program.html">Program</a></li><li><a href="module-vr-vr.SixenseControllerState.html">SixenseControllerState</a></li><li><a href="module-vr-vr.SixenseInfo.html">SixenseInfo</a></li><li><a href="module-vr-vr.SixenseState.html">SixenseState</a></li><li><a href="module-vr-vr.State.html">State</a></li><li><a href="module-vr-vr.StereoEye.html">StereoEye</a></li><li><a href="module-vr-vr.StereoParams.html">StereoParams</a></li><li><a href="module-vr-vr.StereoRenderer.html">StereoRenderer</a></li></ul><h3>Namespaces</h3><ul><li><a href="vr.html">vr</a></li><li><a href="vr.mat4f.html">mat4f</a></li></ul><h3>Global</h3><ul><li><a href="global.html#module vr">module vr</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Apr 29 2013 19:46:47 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
