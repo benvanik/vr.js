@@ -16,6 +16,8 @@ allows for a latency similar to if you were developing a native application
 against the Oculus SDK and, when running on a correctly configured computer,
 will be pretty darn good.
 
+![Screenshot](https://github.com/benvanik/vr.js/raw/master/docs/vrjs-threejs-boxes-demo.jpg "Screenshot of a vr.js demo")
+
 ## Supported Devices
 
 * [Razer Hydra](http://www.razerzone.com/gaming-controllers/razer-hydra)
