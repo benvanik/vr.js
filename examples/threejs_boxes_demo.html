@@ -41,7 +41,7 @@
 		<script src="js/controls/OculusRiftControls.js"></script>
 		<script src="js/effects/OculusRiftEffect.js"></script>
 
-		<div id="info">o,p: distortion [<span id='distVal'>0</span>], k,l; eye separation [<span id='sepVal'>0</span>], n,m; fov [<span id='fovVal'>0</span>]</div>
+		<div id="info">IPD: <span id='ipd'>0</span> (+o/-p)</div>
 
 		<script>
 		(function() {
@@ -222,11 +222,9 @@
 				});
 
 				effect = new THREE.OculusRiftEffect( renderer );
-				//effect.setSize( window.innerWidth, window.innerHeight );
 
-				// document.getElementById( 'distVal' ).innerHTML = effect.distortion.toFixed(2);
-				// document.getElementById( 'sepVal' ).innerHTML = effect.separation;
-				// document.getElementById( 'fovVal' ).innerHTML = effect.fov;
+				document.getElementById('ipd').innerHTML =
+						effect.getInterpupillaryDistance().toFixed(3);
 
 				document.body.appendChild( renderer.domElement );
 
@@ -239,22 +237,22 @@
 			function onWindowResize() {
 			}
 
-			window.IPD = 0.064;
-
 			function keyPressed (event) {
 				switch ( event.keyCode ) {
-					case 79: /*O*/ effect.distortion -= 0.01; document.getElementById( 'distVal' ).innerHTML = effect.distortion.toFixed(2); break;
-					case 80: /*P*/ effect.distortion += 0.01; document.getElementById( 'distVal' ).innerHTML = effect.distortion.toFixed(2); break;
-					case 75: /*K*/ effect.separation -= 1; document.getElementById( 'sepVal' ).innerHTML = effect.separation; break;
-					case 76: /*L*/ effect.separation += 1; document.getElementById( 'sepVal' ).innerHTML = effect.separation; break;
-					case 78: /*N*/ //effect.fov -= 1; document.getElementById( 'fovVal' ).innerHTML = effect.fov; break;
-						window.IPD -= 0.01;
+					case 79: // o
+						effect.setInterpupillaryDistance(
+								effect.getInterpupillaryDistance() - 0.001);
+						document.getElementById('ipd').innerHTML =
+								effect.getInterpupillaryDistance().toFixed(3);
 						break;
-					case 77: /*M*/ //effect.fov += 1; document.getElementById( 'fovVal' ).innerHTML = effect.fov; break;
-						window.IPD += 0.01;
+					case 80: // p
+						effect.setInterpupillaryDistance(
+								effect.getInterpupillaryDistance() + 0.001);
+						document.getElementById('ipd').innerHTML =
+								effect.getInterpupillaryDistance().toFixed(3);
 						break;
 
-					case 70:
+					case 70: // f
 						if (!vr.isFullScreen()) {
 							vr.enterFullScreen();
 						} else {
@@ -263,7 +261,7 @@
 						e.preventDefault();
 						break;
 
-					case 32:
+					case 32: // space
 						vr.resetHmdOrientation();
 						e.preventDefault();
 						break;
