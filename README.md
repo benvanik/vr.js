@@ -26,7 +26,7 @@ will be pretty darn good.
 ## Supported Platforms
 
 * Windows
-  * Chrome 26+
+  * Chrome 26+ (surprisingly good performance)
   * Firefox 20
 
 OSX support coming soon!
@@ -35,15 +35,15 @@ OSX support coming soon!
 
 * Download the [repository ZIP](https://github.com/benvanik/vr.js/archive/master.zip)
 * Extract to some path
+* Chrome:
+  * Open Chrome to `chrome://extensions`
+  * Check 'Developer mode' and click 'Load unpacked extension'
+  * Select the `bin\` folder in the path you extracted the ZIP into
 * Firefox:
   * Open an administrator command prompt
   * cd to `bin\` in the path you extracted the ZIP into
   * Run `install.bat`
   * You should see a successful message box
-* Chrome:
-  * Open Chrome to `chrome://extensions`
-  * Check 'Developer mode' and click 'Load unpacked extension'
-  * Select the `bin\` folder in the path you extracted the ZIP into
 
 ## Demos
 
@@ -62,7 +62,7 @@ You must have the plugin installed before they will run:
 
 ## Documentation
 
-Code is heavily commented - it's best to read that.
+Code is heavily commented - it's best to read that. Everything is in the [vr.js](https://github.com/benvanik/vr.js/blob/master/lib/vr.js) file right now.
 
 If you want fancy HTML docs, see the [Online Documentation](http://benvanik.github.io/vr.js/docs/vr.html).
 
@@ -74,9 +74,7 @@ In the future there will likely be a simple calibration tool added to the JS
 library, but for now the best way to get your IPD is to run Team Fortress 2's
 calibration tool and copy the value out.
 
-### Reducing Latency
-
-#### Don't Overlap the WebGL Canvas
+### Don't Overlap the WebGL Canvas
 
 If you place any other DOM element on top of the Canvas rendering your content
 you may cause extra browser compositing that can slow down your rendering.
@@ -84,7 +82,7 @@ Since you have to draw your entire HUD/etc distored anyway, avoid placing
 any UI on top of the Canvas or adding any CSS effects to it
 (rounded corners, etc).
 
-#### Disable Aero on Windows
+### Disable Aero on Windows
 
 This removes a frame of latency.
 
@@ -92,7 +90,7 @@ This removes a frame of latency.
 * Personalize
 * Choose Windows 7 Basic or Windows Classic
 
-#### Write Fast Code
+### Write Fast Code
 
 Use `requestAnimationFrame` for your rendering and always render as fast as
 possible.
@@ -128,13 +126,13 @@ To use in Chrome:
 * Check 'Developer mode' and click 'Load unpacked extension'
 * Select the `build\npvr\debug\` folder
 
-### Debugging
+## Debugging
 
 Make sure to uninstall the pre-built binary and instead install the plugin
 from the Debug build directory. When trying to rebuild the plugin always ensure
 the browsers that have loaded it are closed.
 
-#### Chrome
+### Chrome
 
 Install the Chrome Canary. Running it on its own (instead of your main Chrome
 instance) makes it much easier to debug/restart/etc.
@@ -147,7 +145,7 @@ Open a page with the plugin and wait for the popup telling you the process ID.
 Switch to Visual Studio, go Debug -> Attach to Process, select the Google plugin
 process with the matching process ID, and attach.
 
-#### Firefox
+### Firefox
 
 Try to run Firefox with no other pages loaded.
 
@@ -159,6 +157,9 @@ Launch, open the page, and attach to firefox.exe in Visual Studio.
 ## License
 
 BSD, except the np_* code.
+
+Some portions of the code are from the official Oculus SDK and fall under
+their license. I hope that's cool :)
 
 ## Credits
 
