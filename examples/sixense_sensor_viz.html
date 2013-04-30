@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>vr.js Sixense Sensor Data Visualization</title>
+    <script src="../lib/vr.js"></script>
+    <script src="../third_party/three.js/three.min.js"></script>
+  </head>
+  <body>
+    <div id="status"></div>
+    <script>
+      var statusEl = document.getElementById('status');
+      statusEl.innerHTML = 'Waiting for plugin...';
+      vr.load(function(error) {
+        if (error) {
+          statusEl.innerHTML = 'Plugin error: ' + error.toString();
+        } else {
+          statusEl.innerHTML = '';
+        }
+      });
+
+      var canvasWidth = 800;
+      var canvasHeight = 600;
+      var cameraViewAngle = 45;
+      var cameraAspect = canvasWidth / canvasHeight;
+      var cameraNear = 0.1;
+      var cameraFar = 10000;
+      var camera = new THREE.PerspectiveCamera(
+          cameraViewAngle, cameraAspect, cameraNear, cameraFar);
+
+      var scene = new THREE.Scene();
+      scene.add(camera);
+      camera.position.z = 800;
+
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(canvasWidth, canvasHeight);
+      document.body.appendChild(renderer.domElement);
+
+      var pointLight = new THREE.PointLight(0xFFFFFF);
+      pointLight.position.x = 10;
+      pointLight.position.y = 50;
+      pointLight.position.z = 130;
+      scene.add(pointLight);
+
+      var defaultMaterial = new THREE.MeshLambertMaterial({
+        color: 0xCC0000
+      });
+      var activeMaterial = new THREE.MeshLambertMaterial({
+        color: 0x00CC00
+      });
+
+      function createPointer() {
+        var container = new THREE.Object3D();
+        container.useQuaternion = true;
+        scene.add(container);
+
+        var arrow = new THREE.ArrowHelper(
+            new THREE.Vector3(0, 0, -1),
+            new THREE.Vector3(0, 0, 0),
+            50,
+            0x00CC00);
+        container.add(arrow);
+
+        var axis = new THREE.AxisHelper(50);
+        container.add(axis);
+
+        var ball = new THREE.Mesh(
+            new THREE.SphereGeometry(10, 16, 16),
+            defaultMaterial);
+        container.add(ball);
+
+        return {
+          container: container,
+          ball: ball
+        };
+      };
+
+      function updatePointer(pointer, controller) {
+        var container = pointer.container;
+        container.position.x = controller.position[0];
+        container.position.y = controller.position[1];
+        container.position.z = controller.position[2];
+        container.quaternion.x = controller.rotation[0];
+        container.quaternion.y = controller.rotation[1];
+        container.quaternion.z = controller.rotation[2];
+        container.quaternion.w = controller.rotation[3];
+
+        var ball = pointer.ball;
+        ball.material = controller.buttons ? activeMaterial : defaultMaterial;
+        ball.position.x = controller.joystick[0] * 10;
+        ball.position.y = controller.joystick[1] * 10;
+        ball.scale.x = 1 + controller.trigger;
+        ball.scale.y = 1 + controller.trigger;
+        ball.scale.z = 1 + controller.trigger;
+      };
+
+      function togglePointer(pointer, visible) {
+        pointer.container.traverse(function(object) {
+          object.visible = visible;
+        });
+      };
+
+      var pointer0 = createPointer();
+      var pointer1 = createPointer();
+
+      var vrstate = new vr.State();
+      function tick() {
+        vr.requestAnimationFrame(tick);
+
+        // Poll VR, if it's ready.
+        if (!vr.pollState(vrstate)) {
+          return;
+        }
+
+        togglePointer(pointer0, vrstate.sixense.present);
+        togglePointer(pointer1, vrstate.sixense.present);
+        if (vrstate.sixense.present) {
+          updatePointer(pointer0, vrstate.sixense.controllers[0]);
+          updatePointer(pointer1, vrstate.sixense.controllers[1]);
+
+          statusEl.innerHTML = '';
+        } else {
+          // Not plugged in.
+          statusEl.innerHTML = 'Sixense controller not found!';
+        }
+
+        renderer.render(scene, camera);
+      };
+      vr.requestAnimationFrame(tick);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>vr.js Oculus Rift Sensor Data Visualization</title>
+    <script src="../lib/vr.js"></script>
+    <script src="../third_party/three.js/three.min.js"></script>
+  </head>
+  <body>
+    <div id="status"></div>
+    <script>
+      var statusEl = document.getElementById('status');
+      statusEl.innerHTML = 'Waiting for plugin...';
+      vr.load(function(error) {
+        if (error) {
+          statusEl.innerHTML = 'Plugin error: ' + error.toString();
+        } else {
+          statusEl.innerHTML = '';
+        }
+      });
+
+      var canvasWidth = 800;
+      var canvasHeight = 600;
+      var cameraViewAngle = 45;
+      var cameraAspect = canvasWidth / canvasHeight;
+      var cameraNear = 0.1;
+      var cameraFar = 10000;
+      var camera = new THREE.PerspectiveCamera(
+          cameraViewAngle, cameraAspect, cameraNear, cameraFar);
+
+      var scene = new THREE.Scene();
+      scene.add(camera);
+      camera.position.z = 800;
+
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(canvasWidth, canvasHeight);
+      document.body.appendChild(renderer.domElement);
+
+      var pointLight = new THREE.PointLight(0xFFFFFF);
+      pointLight.position.x = 10;
+      pointLight.position.y = 50;
+      pointLight.position.z = 130;
+      scene.add(pointLight);
+
+      var defaultMaterial = new THREE.MeshLambertMaterial({
+        color: 0xCC0000
+      });
+
+      function createPointer() {
+        var container = new THREE.Object3D();
+        container.useQuaternion = true;
+        scene.add(container);
+
+        var arrow = new THREE.ArrowHelper(
+            new THREE.Vector3(0, 0, -1),
+            new THREE.Vector3(0, 0, 0),
+            50,
+            0x00CC00);
+        container.add(arrow);
+
+        var axis = new THREE.AxisHelper(50);
+        container.add(axis);
+
+        // TODO(benvanik): make a little rift model.
+        var ball = new THREE.Mesh(
+            new THREE.SphereGeometry(10, 16, 16),
+            defaultMaterial);
+        container.add(ball);
+
+        return {
+          container: container,
+          ball: ball
+        };
+      };
+
+      function togglePointer(pointer, visible) {
+        pointer.container.traverse(function(object) {
+          object.visible = visible;
+        });
+      };
+
+      var oculusPointer = createPointer();
+
+      var vrstate = new vr.State();
+      function tick() {
+        vr.requestAnimationFrame(tick);
+
+        // Poll VR, if it's ready.
+        if (!vr.pollState(vrstate)) {
+          return;
+        }
+
+        togglePointer(oculusPointer, vrstate.hmd.present);
+        if (vrstate.hmd.present) {
+          var container = oculusPointer.container;
+          container.quaternion.x = vrstate.hmd.rotation[0];
+          container.quaternion.y = vrstate.hmd.rotation[1];
+          container.quaternion.z = vrstate.hmd.rotation[2];
+          container.quaternion.w = vrstate.hmd.rotation[3];
+
+          statusEl.innerHTML = '';
+        } else {
+          // Not plugged in.
+          statusEl.innerHTML = 'Oculus Rift not found!';
+        }
+
+        renderer.render(scene, camera);
+      };
+      vr.requestAnimationFrame(tick);
+
+      document.addEventListener('keydown', function(e) {
+        switch (e.keyCode) {
+          case 32:
+            vr.resetHmdOrientation();
+            e.preventDefault();
+            break;
+        }
+      }, false);
+    </script>
+  </body>
+</html>

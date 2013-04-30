@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>vr.js Rift Cube Demo</title>
+    <script src="../lib/vr.js"></script>
+    <script src="../third_party/gl-matrix/gl-matrix.js"></script>
+    <script src="rift_cube_demo.js"></script>
+    <style>
+      #canvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      #status {
+        position: absolute;
+        top: 800px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <div id="status"></div>
+
+    <script>
+      launchDemo(
+          document.getElementById('status'),
+          document.getElementById('canvas'));
+    </script>
+  </body>
+</html>
