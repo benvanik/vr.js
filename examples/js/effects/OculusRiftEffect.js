@@ -68,6 +68,24 @@ THREE.OculusRiftEffect.prototype.init_ = function(info) {
 
 
 /**
+ * Gets the current interpupillary distance value.
+ * @return {number} IPD value.
+ */
+THREE.OculusRiftEffect.prototype.getInterpupillaryDistance = function() {
+  return this.stereoRenderer_.getInterpupillaryDistance();
+};
+
+
+/**
+ * Sets a new interpupillary distance value.
+ * @param {number} value New IPD value.
+ */
+THREE.OculusRiftEffect.prototype.setInterpupillaryDistance = function(value) {
+  this.stereoRenderer_.setInterpupillaryDistance(value);
+};
+
+
+/**
  * Renders the scene to both eyes.
  * @param {!THREE.Scene} scene Three.js scene.
  * @param {!THREE.Camera} camera User camera. This is treated as the neck base.
