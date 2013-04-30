@@ -13,10 +13,17 @@ git merge origin/gh-pages
 
 rmdir /s /q docs
 mkdir docs
-copy ..\vr.js\build\docs docs\
-copy ..\vr.js\build\docs\scripts docs\scripts\
-copy ..\vr.js\build\docs\styles docs\styles\
-git add --all docs\
+xcopy /s ..\vr.js\build\docs docs\
+
+rmdir /s /q examples
+mkdir examples
+xcopy /s ..\vr.js\examples examples\
+
+rmdir /s /q lib
+mkdir lib
+xcopy /s ..\vr.js\lib lib\
+
+git add --all docs\ examples\ lib\
 git commit -m "Updating docs/ to the latest version."
 
 git push origin gh-pages

@@ -1,6 +1,21 @@
 # vr.js
 An experimental NPAPI plugin for Chrome and Firefox that exposes fun VR devices.
 
+`vr.js`, in conjunction with a required native browser plugin, exposes the
+Oculus Rift and Razer Hydra to Javascript in a performant, easy-to-use way. The
+library makes it simple to query the device values in just a few lines of code
+but also handles more advanced things like computing all the math required for
+rendering lens distorted scenes. If you want, it even has a slick API for easily
+rendering the distored scene that should be easy to drop into any WebGL
+application. There's also an example three.js wrapper under
+[examples\js\effects\](https://github.com/benvanik/vr.js/tree/master/examples/js/effects) that works pretty well.
+
+Oh, and though it's possible to use node and WebSockets to get the sensor data
+I don't recommend it - the latency is simply too high (~10ms). This plugin
+allows for a latency similar to if you were developing a native application
+against the Oculus SDK and, when running on a correctly configured computer,
+will be pretty darn good.
+
 ## Supported Devices
 
 * [Razer Hydra](http://www.razerzone.com/gaming-controllers/razer-hydra)
@@ -30,11 +45,13 @@ OSX support coming soon!
 
 ## Demos
 
-* Raw Data: `examples/raw_data.html`
-* Sixense Sensor Data Visualization: `examples/sixense_sensor_viz.html`
-* Rift Sensor Data Visualization: `examples/rift_sensor_viz.html`
-* Simple WebGL Demo: `examples/rift_cube_demo.html`
-* Three.js Floating Boxes Demo: `examples/threejs_boxes_demo.html`
+You must have the plugin installed before they will run:
+
+* [Raw Data](http://benvanik.github.io/vr.js/examples/raw_data.html): [examples/raw_data.html](https://github.com/benvanik/vr.js/blob/master/examples/raw_data.html)
+* [Sixense Sensor Data Visualization](http://benvanik.github.io/vr.js/examples/sixense_sensor_viz.html): [examples/sixense_sensor_viz.html](https://github.com/benvanik/vr.js/blob/master/examples/sixense_sensor_viz.html)
+* [Rift Sensor Data Visualization](http://benvanik.github.io/vr.js/examples/rift_sensor_viz.html): [examples/rift_sensor_viz.html](https://github.com/benvanik/vr.js/blob/master/examples/rift_sensor_viz.html)
+* [Simple WebGL Demo](http://benvanik.github.io/vr.js/examples/rift_cube_demo.html): [examples/rift_cube_demo.html/js](https://github.com/benvanik/vr.js/blob/master/examples/rift_cube_demo.js)
+* [Three.js Floating Boxes Demo](http://benvanik.github.io/vr.js/examples/threejs_boxes_demo.html): [examples/threejs_boxes_demo.html](https://github.com/benvanik/vr.js/blob/master/examples/threejs_boxes_demo.html)
 
 ## Documentation
 
