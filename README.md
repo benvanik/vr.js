@@ -16,6 +16,10 @@ allows for a latency similar to if you were developing a native application
 against the Oculus SDK and, when running on a correctly configured computer,
 will be pretty darn good.
 
+NOTE: the Oculus SDK doesn't like sharing devices - you must close other Oculus
+apps before using this in your browser and must close your browser if you want
+to run another Oculus app. Lame :(
+
 ![Screenshot](https://github.com/benvanik/vr.js/raw/master/docs/vrjs-threejs-boxes-demo.jpg "Screenshot of a vr.js demo")
 
 ## Supported Devices
@@ -94,6 +98,24 @@ This removes a frame of latency.
 
 Use `requestAnimationFrame` for your rendering and always render as fast as
 possible.
+
+## Future Ideas
+
+### 3D DOM
+
+Using CSS transform and matrix3d it'd be possible to position any DOM content
+correctly. Then, once CSS Shaders are available in browsers, the DOM content
+could be distorted/color corrected.
+
+### Pure Javascript Drivers
+
+Chrome apps have the [chrome.usb](http://developer.chrome.com/trunk/apps/usb.html)
+API allowing direct access to devices. Implementing the sensor communication
+and sensor fusion code in Javascript would allow apps to work on any OS
+Chrome runs on (ChromeOS too!) without the need for plugins. Unfortunately it's
+restricted to packaged apps only, not the general web.
+
+Mozilla is also considering a USB API, [WebUSB](https://bugzilla.mozilla.org/show_bug.cgi?id=674718), however it seems to have stalled.
 
 ## Building
 
