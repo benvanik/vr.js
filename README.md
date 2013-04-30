@@ -74,6 +74,14 @@ calibration tool and copy the value out.
 
 ### Reducing Latency
 
+#### Don't Overlap the WebGL Canvas
+
+If you place any other DOM element on top of the Canvas rendering your content
+you may cause extra browser compositing that can slow down your rendering.
+Since you have to draw your entire HUD/etc distored anyway, avoid placing
+any UI on top of the Canvas or adding any CSS effects to it
+(rounded corners, etc).
+
 #### Disable Aero on Windows
 
 This removes a frame of latency.
