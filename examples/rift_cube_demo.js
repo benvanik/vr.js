@@ -434,18 +434,23 @@ Demo.prototype.renderScene_ = function(eye, width, height) {
  * @param {!HTMLCanvasElement} canvas Target render canvas.
  */
 global.launchDemo = function(statusEl, canvas) {
+  function startDemo() {
+    new Demo(statusEl, canvas);
+  };
+
   if (!vr.isInstalled()) {
     statusEl.innerText = 'NPVR plugin not installed!';
+    startDemo();
     return;
   }
+
   vr.load(function(error) {
     if (error) {
       statusEl.innerText = 'Plugin load failed: ' + error.toString();
-      return;
     }
 
     try {
-      new Demo(statusEl, canvas);
+      startDemo();
     } catch (e) {
       statusEl.innerText = e.toString();
       console.log(e);

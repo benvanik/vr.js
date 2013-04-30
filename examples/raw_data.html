@@ -14,9 +14,7 @@
       vr.load(function(error) {
         if (error) {
           window.alert('VR error:\n' + error.toString());
-          return;
         }
-        console.log('npvr ready!');
 
         var state = new vr.State();
         function tick() {
