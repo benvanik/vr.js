@@ -458,5 +458,11 @@ global.launchDemo = function(statusEl, canvas) {
   });
 };
 
+vr.waitForDomReady(document, function() {
+  launchDemo(
+      document.getElementById('status'),
+      document.getElementById('canvas'));
+});
+
 })(window);
 
