@@ -35,6 +35,8 @@ to run another Oculus app. Lame :(
 
 OSX support coming soon!
 
+If using the [experimental Chrome USB driver](https://github.com/benvanik/vr.js/tree/master/experimental/usb-driver) you can run on both OS X and Linux.
+
 ## Installing
 
 * Download the [repository ZIP](https://github.com/benvanik/vr.js/archive/master.zip)
@@ -109,11 +111,13 @@ could be distorted/color corrected.
 
 ### Pure Javascript Drivers
 
+An [experimental pure Javascript driver for Chrome](https://github.com/benvanik/vr.js/tree/master/experimental/usb-driver) is available here. It works on OS X and Linux and requires a small tweak before it can work, but shows the promise!
+
 Chrome apps have the [chrome.usb](http://developer.chrome.com/trunk/apps/usb.html)
 API allowing direct access to devices. Implementing the sensor communication
-and sensor fusion code in Javascript would allow apps to work on any OS
+and sensor fusion code in Javascript allows apps to work on any OS
 Chrome runs on (ChromeOS too!) without the need for plugins. Unfortunately it's
-restricted to packaged apps only, not the general web.
+restricted to packaged apps only, not the general web, and the API does not support HID devices.
 
 Mozilla is also considering a USB API, [WebUSB](https://bugzilla.mozilla.org/show_bug.cgi?id=674718), however it seems to have stalled.
 
