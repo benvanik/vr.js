@@ -20,6 +20,8 @@ NOTE: the Oculus SDK doesn't like sharing devices - you must close other Oculus
 apps before using this in your browser and must close your browser if you want
 to run another Oculus app. Lame :(
 
+If you want to see something really crazy, check out the [experimental pure Javascript driver for Chrome](https://github.com/benvanik/vr.js/tree/master/experimental/usb-driver). Pure Javascript device drivers, pretty insane, huh?!
+
 ![Screenshot](https://github.com/benvanik/vr.js/raw/master/docs/vrjs-threejs-boxes-demo.jpg "Screenshot of a vr.js demo")
 
 ## Supported Devices
