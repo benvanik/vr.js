@@ -16,4 +16,6 @@
 #include <string.h>
 #include <sstream>
 
+extern NPNetscapeFuncs NPNFuncs;
+
 #endif  // NPVR_H_

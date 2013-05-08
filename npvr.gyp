@@ -15,14 +15,26 @@
       'third_party/sixense/include/',
       'third_party/oculus-sdk/LibOVR/Include',
     ],
-    'third_party_lib_paths': [
-      '../../third_party/sixense/lib/win32/release_dll/',
-      '../../third_party/oculus-sdk/LibOVR/Lib/Win32',
-    ],
-    'third_party_libs': [
-      'sixense.lib',
-      'libovr.lib',
-      'winmm.lib',
+    'conditions': [
+      ['OS == "win"', {
+        'third_party_lib_paths': [
+          '../../third_party/sixense/lib/win32/release_dll/',
+          '../../third_party/oculus-sdk/LibOVR/Lib/Win32',
+        ],
+        'third_party_libs': [
+          'sixense.lib',
+          'libovr.lib',
+          'winmm.lib',
+        ],
+      }],
+      ['OS == "mac"', {
+        'third_party_lib_paths': [
+          'third_party/oculus-sdk/LibOVR/Lib/MacOS/Debug',
+        ],
+        'third_party_libs': [
+          'libovr.a',
+        ],
+      }],
     ],
   },
 
@@ -46,6 +58,13 @@
       ['OS == "win"', {
         'defines': [
           '_WIN32=1',
+          'USE_SIXENSE=1',
+          'XP_WIN=1',
+        ],
+      }],
+      ['OS == "mac"', {
+        'defines': [
+          'XP_MACOSX=1',
         ],
       }],
     ],
@@ -94,16 +113,19 @@
         'xcode_settings': {
           'SYMROOT': '<(DEPTH)/build/npvr/',
           'ALWAYS_SEARCH_USER_PATHS': 'NO',
-          'ARCHS': ['x86'],
+          'ARCHS': ['i386'],
           #'CLANG_CXX_LANGUAGE_STANDARD': 'c++0x',
           'COMBINE_HIDPI_IMAGES': 'YES',
           'GCC_C_LANGUAGE_STANDARD': 'gnu99',
           'GCC_SYMBOLS_PRIVATE_EXTERN': 'YES',
+          'GCC_SYMBOLS_PRIVATE_EXTERN': 'YES',
           #'GCC_TREAT_WARNINGS_AS_ERRORS': 'YES',
-          'GCC_WARN_ABOUT_MISSING_NEWLINE': 'YES',
+          'GCC_ENABLE_CPP_RTTI': 'NO',
+          'GCC_WARN_ABOUT_MISSING_NEWLINE': 'NO',
           'GCC_VERSION': 'com.apple.compilers.llvm.clang.1_0',
           'WARNING_CFLAGS': ['-Wall', '-Wendif-labels'],
           'LIBRARY_SEARCH_PATHS': [
+            '<@(third_party_lib_paths)',
           ],
         },
 
@@ -183,18 +205,27 @@
       'product_name': 'npvr',
       'type': 'shared_library',
 
+      'mac_bundle': 1,
+      'xcode_settings': {
+        'INFOPLIST_FILE': 'src/Info.plist',
+      },
+      'product_extension': 'plugin',
+
+      'libraries': [
+        '<@(third_party_libs)',
+      ],
       'conditions': [
-        ['OS == "win"', {
-          'libraries': [
-            '<@(third_party_libs)',
+        ['OS != "win"', {
+          'sources!': [
+            'src/main_win.cpp',
           ],
         }],
         ['OS == "mac"', {
-          'xcode_settings': {
-            'OTHER_LDFLAGS': [
-              #'<@(third_party_libs)',
-            ],
-          },
+          'libraries': [
+            '$(SDKROOT)/System/Library/Frameworks/CoreFoundation.framework',
+            '$(SDKROOT)/System/Library/Frameworks/CoreGraphics.framework',
+            '$(SDKROOT)/System/Library/Frameworks/IOKit.framework',
+          ],
         }],
       ],
 
