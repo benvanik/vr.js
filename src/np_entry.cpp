@@ -45,38 +45,41 @@
 #define HIBYTE(x) ((((uint32_t)(x)) & 0xff00) >> 8)
 #endif
 
+#ifdef XP_WIN
+#define EXPORT
+#else   // XP_WIN
+#define EXPORT __attribute__((visibility("default"))) extern "C"
+#endif  // XP_WIN
+
 NPNetscapeFuncs NPNFuncs;
 
-#ifdef XP_WIN
-
-NPError OSCALL NP_GetEntryPoints(NPPluginFuncs* pFuncs)
+EXPORT NPError OSCALL NP_GetEntryPoints(NPPluginFuncs* pFuncs)
 {
     if(pFuncs == NULL)
         return NPERR_INVALID_FUNCTABLE_ERROR;
 
-    //if(pFuncs->size < sizeof(NPPluginFuncs))
-    //    return NPERR_INVALID_FUNCTABLE_ERROR;
-
-    pFuncs->version       = (NP_VERSION_MAJOR << 8) | NP_VERSION_MINOR;
-    pFuncs->newp          = NPP_New;
-    pFuncs->destroy       = NPP_Destroy;
-    pFuncs->setwindow     = NPP_SetWindow;
-    pFuncs->newstream     = NPP_NewStream;
-    pFuncs->destroystream = NPP_DestroyStream;
-    pFuncs->asfile        = NPP_StreamAsFile;
-    pFuncs->writeready    = NPP_WriteReady;
-    pFuncs->write         = NPP_Write;
-    pFuncs->print         = NPP_Print;
-    pFuncs->event         = NPP_HandleEvent;
-    pFuncs->urlnotify     = NPP_URLNotify;
-    pFuncs->getvalue      = NPP_GetValue;
-    pFuncs->setvalue      = NPP_SetValue;
-    pFuncs->javaClass     = NULL;
+    NPPluginFuncs ourFuncs;
+    memset(&ourFuncs, 0, sizeof(ourFuncs));
+    ourFuncs.size          = pFuncs->size;
+    ourFuncs.version       = (NP_VERSION_MAJOR << 8) | NP_VERSION_MINOR;
+    ourFuncs.newp          = NPP_New;
+    ourFuncs.destroy       = NPP_Destroy;
+    ourFuncs.setwindow     = NPP_SetWindow;
+    ourFuncs.newstream     = NPP_NewStream;
+    ourFuncs.destroystream = NPP_DestroyStream;
+    ourFuncs.asfile        = NPP_StreamAsFile;
+    ourFuncs.writeready    = NPP_WriteReady;
+    ourFuncs.write         = NPP_Write;
+    ourFuncs.print         = NPP_Print;
+    ourFuncs.event         = NPP_HandleEvent;
+    ourFuncs.urlnotify     = NPP_URLNotify;
+    ourFuncs.getvalue      = NPP_GetValue;
+    ourFuncs.setvalue      = NPP_SetValue;
+    ourFuncs.javaClass     = NULL;
+    memcpy(pFuncs, &ourFuncs, pFuncs->size);
 
     return NPERR_NO_ERROR;
 }
-
-#endif /* XP_WIN */
 
 char *NPP_GetMIMEDescription();
 
@@ -93,9 +96,9 @@ NP_GetValue(void* future, NPPVariable variable, void *value)
 }
 
 #ifndef XP_UNIX
-NPError OSCALL NP_Initialize(NPNetscapeFuncs* pFuncs)
+EXPORT NPError OSCALL NP_Initialize(NPNetscapeFuncs* pFuncs)
 #else
-NPError OSCALL NP_Initialize(NPNetscapeFuncs* pFuncs, NPPluginFuncs* pluginFuncs)
+EXPORT NPError OSCALL NP_Initialize(NPNetscapeFuncs* pFuncs, NPPluginFuncs* pluginFuncs)
 #endif
 {
     if(pFuncs == NULL)
@@ -104,51 +107,11 @@ NPError OSCALL NP_Initialize(NPNetscapeFuncs* pFuncs, NPPluginFuncs* pluginFuncs
     if(HIBYTE(pFuncs->version) > NP_VERSION_MAJOR)
         return NPERR_INCOMPATIBLE_VERSION_ERROR;
 
-    //if(pFuncs->size < sizeof(NPNetscapeFuncs))
-    //    return NPERR_INVALID_FUNCTABLE_ERROR;
-
-    NPNFuncs.size                    = pFuncs->size;
-    NPNFuncs.version                 = pFuncs->version;
-    NPNFuncs.geturlnotify            = pFuncs->geturlnotify;
-    NPNFuncs.geturl                  = pFuncs->geturl;
-    NPNFuncs.posturlnotify           = pFuncs->posturlnotify;
-    NPNFuncs.posturl                 = pFuncs->posturl;
-    NPNFuncs.requestread             = pFuncs->requestread;
-    NPNFuncs.newstream               = pFuncs->newstream;
-    NPNFuncs.write                   = pFuncs->write;
-    NPNFuncs.destroystream           = pFuncs->destroystream;
-    NPNFuncs.status                  = pFuncs->status;
-    NPNFuncs.uagent                  = pFuncs->uagent;
-    NPNFuncs.memalloc                = pFuncs->memalloc;
-    NPNFuncs.memfree                 = pFuncs->memfree;
-    NPNFuncs.memflush                = pFuncs->memflush;
-    NPNFuncs.reloadplugins           = pFuncs->reloadplugins;
-    NPNFuncs.getJavaEnv              = pFuncs->getJavaEnv;
-    NPNFuncs.getJavaPeer             = pFuncs->getJavaPeer;
-    NPNFuncs.getvalue                = pFuncs->getvalue;
-    NPNFuncs.setvalue                = pFuncs->setvalue;
-    NPNFuncs.invalidaterect          = pFuncs->invalidaterect;
-    NPNFuncs.invalidateregion        = pFuncs->invalidateregion;
-    NPNFuncs.forceredraw             = pFuncs->forceredraw;
-    NPNFuncs.getstringidentifier     = pFuncs->getstringidentifier;
-    NPNFuncs.getstringidentifiers    = pFuncs->getstringidentifiers;
-    NPNFuncs.getintidentifier        = pFuncs->getintidentifier;
-    NPNFuncs.identifierisstring      = pFuncs->identifierisstring;
-    NPNFuncs.utf8fromidentifier      = pFuncs->utf8fromidentifier;
-    NPNFuncs.intfromidentifier       = pFuncs->intfromidentifier;
-    NPNFuncs.createobject            = pFuncs->createobject;
-    NPNFuncs.retainobject            = pFuncs->retainobject;
-    NPNFuncs.releaseobject           = pFuncs->releaseobject;
-    NPNFuncs.invoke                  = pFuncs->invoke;
-    NPNFuncs.invokeDefault           = pFuncs->invokeDefault;
-    NPNFuncs.evaluate                = pFuncs->evaluate;
-    NPNFuncs.getproperty             = pFuncs->getproperty;
-    NPNFuncs.setproperty             = pFuncs->setproperty;
-    NPNFuncs.removeproperty          = pFuncs->removeproperty;
-    NPNFuncs.hasproperty             = pFuncs->hasproperty;
-    NPNFuncs.hasmethod               = pFuncs->hasmethod;
-    NPNFuncs.releasevariantvalue     = pFuncs->releasevariantvalue;
-    NPNFuncs.setexception            = pFuncs->setexception;
+    size_t ourSize = sizeof(NPNFuncs);
+    size_t theirSize = pFuncs->size;
+    size_t sizeToCopy = ourSize < theirSize ? ourSize : theirSize;
+    memset(&NPNFuncs, 0, ourSize);
+    memcpy(&NPNFuncs, pFuncs, sizeToCopy);
 
 #ifdef XP_UNIX
     /*
@@ -181,7 +144,7 @@ NPError OSCALL NP_Initialize(NPNetscapeFuncs* pFuncs, NPPluginFuncs* pluginFuncs
     return NPERR_NO_ERROR;
 }
 
-NPError OSCALL NP_Shutdown()
+EXPORT NPError OSCALL NP_Shutdown()
 {
     return NPERR_NO_ERROR;
 }

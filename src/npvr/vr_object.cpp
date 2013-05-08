@@ -3,8 +3,9 @@
 #include <npvr/vr_object.h>
 #include <npvr/ovr_manager.h>
 
+#ifdef USE_SIXENSE
 #include <third_party/sixense/include/sixense.h>
-
+#endif // USE_SIXENSE
 
 using namespace npvr;
 
@@ -13,8 +14,10 @@ namespace {
 
 DECLARE_NPOBJECT_CLASS_WITH_BASE(VRObject, VRObject::Allocate);
 
+#ifdef USE_SIXENSE
 // HACK: not thread safe!
 static int sixense_init_count_ = 0;
+#endif // USE_SIXENSE
 
 }
 
@@ -33,6 +36,7 @@ VRObject::VRObject(NPP npp) :
   exec_id_ = NPN_GetStringIdentifier("exec");
   poll_id_ = NPN_GetStringIdentifier("poll");
 
+#ifdef USE_SIXENSE
   // Initialize sixense library, if needed.
   if (!sixense_init_count_) {
     sixense_ready_ = sixenseInit() == SIXENSE_SUCCESS;
@@ -42,13 +46,16 @@ VRObject::VRObject(NPP npp) :
   if (sixense_ready_) {
     sixense_init_count_++;
   }
+#endif // USE_SIXENSE
 }
 
 VRObject::~VRObject() {
+#ifdef USE_SIXENSE
   sixense_init_count_--;
   if (!sixense_init_count_) {
     sixenseExit();
   }
+#endif // USE_SIXENSE
 }
 
 bool VRObject::InvokeExec(const NPVariant* args, uint32_t arg_count,
@@ -151,6 +158,7 @@ void VRObject::PollSixenseState(std::ostringstream& s) {
     return;
   }
 
+#ifdef USE_SIXENSE
   s << "s,";
 
   sixenseAllControllerData acd;
@@ -192,6 +200,7 @@ void VRObject::PollSixenseState(std::ostringstream& s) {
   }
 
   s << "|";
+#endif // USE_SIXENSE
 }
 
 void VRObject::PollHmdState(std::ostringstream& s) {

@@ -76,6 +76,18 @@ NPError NPP_New(NPMIMEType pluginType,
   if(instance == NULL)
     return NPERR_INVALID_INSTANCE_ERROR;
 
+#ifdef XP_MACOSX
+  // Setting Core Graphics drawing is required for the plugin to load in
+  // modern browsers, because the default QuickDraw mode is no longer
+  // supported. We don't actually care whether setting this succeeds, because
+  // we don't draw.
+  NPNFuncs.setvalue(instance, NPPVpluginDrawingModel,
+                    (void*)NPDrawingModelCoreGraphics);
+  // http://crbug.com/139816 suggests that the Cocoa event model will soon be
+  // required too.
+  NPNFuncs.setvalue(instance, NPPVpluginEventModel, (void*) NPEventModelCocoa);
+#endif
+
   NPError rv = NPERR_NO_ERROR;
 
   Plugin * pPlugin = new Plugin(instance);
@@ -111,8 +123,6 @@ NPError NPP_SetWindow (NPP instance, NPWindow* pNPWindow)
   if(instance == NULL)
     return NPERR_INVALID_INSTANCE_ERROR;
 
-  NPError rv = NPERR_NO_ERROR;
-
   if(pNPWindow == NULL)
     return NPERR_GENERIC_ERROR;
 
@@ -121,8 +131,8 @@ NPError NPP_SetWindow (NPP instance, NPWindow* pNPWindow)
   if(pPlugin == NULL)
     return NPERR_GENERIC_ERROR;
 
-  // window just created
-  if(!pPlugin->is_initialized() && (pNPWindow->window != NULL)) {
+  if(!pPlugin->is_initialized()) {
+    // window just created
     if(!pPlugin->Init(pNPWindow)) {
       delete pPlugin;
       pPlugin = NULL;
@@ -131,19 +141,7 @@ NPError NPP_SetWindow (NPP instance, NPWindow* pNPWindow)
     }
   }
 
-  // window goes away
-  if((pNPWindow->window == NULL) && pPlugin->is_initialized())
-    return NPERR_NO_ERROR;
-
-  // window resized
-  if(pPlugin->is_initialized() && (pNPWindow->window != NULL))
-    return NPERR_NO_ERROR;
-
-  // this should not happen, nothing to do
-  if((pNPWindow->window == NULL) && !pPlugin->is_initialized())
-    return NPERR_NO_ERROR;
-
-  return rv;
+  return NPERR_NO_ERROR;
 }
 
 // ==============================
