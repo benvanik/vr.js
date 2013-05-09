@@ -35,7 +35,10 @@ If you want to see something really crazy, check out the [experimental pure Java
   * Chrome 26+ (surprisingly good performance)
   * Firefox 20
 
-OSX support coming soon!
+* Mac OS X
+  * Chrome 26+
+  * Firefox 20
+  * Safari 6
 
 If using the [experimental Chrome USB driver](https://github.com/benvanik/vr.js/tree/master/experimental/usb-driver) you can run on both OS X and Linux.
 
@@ -43,15 +46,18 @@ If using the [experimental Chrome USB driver](https://github.com/benvanik/vr.js/
 
 * Download the [repository ZIP](https://github.com/benvanik/vr.js/archive/master.zip)
 * Extract to some path
-* Chrome:
-  * Open Chrome to `chrome://extensions`
-  * Check 'Developer mode' and click 'Load unpacked extension'
-  * Select the `bin\` folder in the path you extracted the ZIP into
-* Firefox:
-  * Open an administrator command prompt
-  * cd to `bin\` in the path you extracted the ZIP into
-  * Run `install.bat`
-  * You should see a successful message box
+* Mac OS X:
+    * Run `bin/install.sh` to install the plugin.
+* Windows:
+    - Chrome:
+        * Open Chrome to `chrome://extensions`
+        * Check 'Developer mode' and click 'Load unpacked extension'
+        * Select the `bin\` folder in the path you extracted the ZIP into
+    - Firefox:
+        * Open an administrator command prompt
+        * cd to `bin\` in the path you extracted the ZIP into
+        * Run `install.bat`
+        * You should see a successful message box
 
 ## Demos
 
