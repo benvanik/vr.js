@@ -82,11 +82,37 @@ If you want fancy HTML docs, see the [Online Documentation](http://benvanik.gith
 
 ## Tips
 
+### Launch Chrome with Flags
+
+There are many features in Chrome you can disable to decrease latency. Install
+a Canary or Chromium build and launch it as follows:
+
+```
+/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --disable-gpu-vsync --disable-image-transport-surface --disable-threaded-compositing --in-process-gpu
+```
+
+Some things may not work quite right, but it'll be faster!
+
 ### Calibration
 
 In the future there will likely be a simple calibration tool added to the JS
 library, but for now the best way to get your IPD is to run Team Fortress 2's
 calibration tool and copy the value out.
+
+### OS X: Disable Vsync
+
+Download Apple's 'Graphics Tools for Xcode' from their
+[download page](https://developer.apple.com/downloads/) and run the
+'Quartz Debug' app. Disable 'Beam Sync' at the bottom. This may cause some
+tearing but reduces latency.
+
+### Windows: Disable Aero
+
+This removes a frame of latency.
+
+* Right click on desktop
+* Personalize
+* Choose Windows 7 Basic or Windows Classic
 
 ### Don't Overlap the WebGL Canvas
 
@@ -95,14 +121,6 @@ you may cause extra browser compositing that can slow down your rendering.
 Since you have to draw your entire HUD/etc distored anyway, avoid placing
 any UI on top of the Canvas or adding any CSS effects to it
 (rounded corners, etc).
-
-### Disable Aero on Windows
-
-This removes a frame of latency.
-
-* Right click on desktop
-* Personalize
-* Choose Windows 7 Basic or Windows Classic
 
 ### Write Fast Code
 
