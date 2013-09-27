@@ -1,4 +1,3 @@
-# Copyright 2013 Ben Vanik. All Rights Reserved.
 {
   'default_configuration': 'Release',
 
