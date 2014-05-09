@@ -20,6 +20,8 @@ NOTE: the Oculus SDK doesn't like sharing devices - you must close other Oculus
 apps before using this in your browser and must close your browser if you want
 to run another Oculus app. Lame :(
 
+If you want to see something really crazy, check out the [experimental pure Javascript driver for Chrome](https://github.com/benvanik/vr.js/tree/master/experimental/usb-driver). Pure Javascript device drivers, pretty insane, huh?!
+
 ![Screenshot](https://github.com/benvanik/vr.js/raw/master/docs/vrjs-threejs-boxes-demo.jpg "Screenshot of a vr.js demo")
 
 ## Supported Devices
@@ -37,6 +39,8 @@ to run another Oculus app. Lame :(
   * Chrome 26+
   * Firefox 20
   * Safari 6
+
+If using the [experimental Chrome USB driver](https://github.com/benvanik/vr.js/tree/master/experimental/usb-driver) you can run on both OS X and Linux.
 
 ## Installing
 
@@ -132,6 +136,8 @@ correctly. Then, once CSS Shaders are available in browsers, the DOM content
 could be distorted/color corrected.
 
 ### Pure Javascript Drivers
+
+An [experimental pure Javascript driver for Chrome](https://github.com/benvanik/vr.js/tree/master/experimental/usb-driver) is available here. It works on OS X and Linux and requires a small tweak before it can work, but shows the promise!
 
 Chrome apps have the [chrome.usb](http://developer.chrome.com/trunk/apps/usb.html)
 API allowing direct access to devices. Implementing the sensor communication

@@ -1,0 +1,29 @@
+{
+  "name": "vr.js USB Driver",
+  "description": "Experimental USB driver for VR devices.",
+  "version": "1",
+  "permissions": [
+    "fullscreen",
+    "usb"
+  ],
+  "optional_permissions": [
+    {
+      "usbDevices": [
+        {
+          "vendorId": 10291,
+          "productId": 1
+        }
+      ]
+    }
+  ],
+  "app": {
+    "background": {
+      "scripts": [
+        "device-info.js",
+        "background.js"
+      ]
+    }
+  },
+  "icons": {
+  }
+}
